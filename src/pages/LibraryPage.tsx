@@ -1,0 +1,68 @@
+import { Grid, Group, Select, TextInput, Title } from '@mantine/core';
+import { IconSearch } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
+import fragrancesData from '../mock/fragrances.json';
+import { FragranceCard } from '../components/FragranceCard';
+import { searchByName } from '../utils/search';
+import type { Fragrance } from '../types';
+
+const fragrances = fragrancesData as Fragrance[];
+
+/**
+ * 示例库页面：浏览 Mock 香调，支持按名称搜索
+ */
+export function LibraryPage() {
+  const [query, setQuery] = useState('');
+  const [category, setCategory] = useState<string | null>(null);
+
+  const filtered = useMemo(() => {
+    let result = searchByName(fragrances, query);
+    if (category) {
+      result = result.filter((f) => f.category === category);
+    }
+    return result;
+  }, [query, category]);
+
+  return (
+    <>
+      <Title order={2} mb="md">
+        示例库
+      </Title>
+
+      <Group mb="lg" align="flex-end">
+        <TextInput
+          placeholder="按名称搜索..."
+          leftSection={<IconSearch size={16} />}
+          value={query}
+          onChange={(e) => setQuery(e.currentTarget.value)}
+          style={{ flex: 1, maxWidth: 400 }}
+        />
+        <Select
+          placeholder="分类筛选"
+          clearable
+          data={[
+            { value: 'perfume', label: '香水' },
+            { value: 'incense', label: '线香' },
+          ]}
+          value={category}
+          onChange={setCategory}
+          w={160}
+        />
+      </Group>
+
+      <Grid>
+        {filtered.map((fragrance) => (
+          <Grid.Col key={fragrance.id} span={{ base: 12, sm: 6, lg: 4 }}>
+            <FragranceCard fragrance={fragrance} />
+          </Grid.Col>
+        ))}
+      </Grid>
+
+      {filtered.length === 0 && (
+        <Title order={4} c="dimmed" ta="center" mt="xl">
+          未找到匹配的香调
+        </Title>
+      )}
+    </>
+  );
+}

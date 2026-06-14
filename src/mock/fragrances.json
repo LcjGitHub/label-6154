@@ -1,0 +1,200 @@
+[
+  {
+    "id": "f001",
+    "name": "晨露白兰",
+    "topNotes": "佛手柑、青柠、晨露",
+    "middleNotes": "白兰花、茉莉、铃兰",
+    "baseNotes": "白麝香、雪松、琥珀",
+    "category": "perfume",
+    "description": "清晨花园里的白兰花香，清冽而温柔。"
+  },
+  {
+    "id": "f002",
+    "name": "檀韵禅心",
+    "topNotes": "柏木、乳香",
+    "middleNotes": "老山檀、沉香",
+    "baseNotes": "龙涎香、安息香",
+    "category": "incense",
+    "description": "传统线香，檀木与沉香的沉静组合，适合冥想。"
+  },
+  {
+    "id": "f003",
+    "name": "赤霞玫瑰",
+    "topNotes": "黑醋栗、粉红胡椒",
+    "middleNotes": "大马士革玫瑰、牡丹",
+    "baseNotes": "广藿香、香草、麂皮",
+    "category": "perfume",
+    "description": "浓郁而华丽的玫瑰香，带有轻微的辛辣感。"
+  },
+  {
+    "id": "f004",
+    "name": "竹林清风",
+    "topNotes": "竹叶、柠檬草",
+    "middleNotes": "竹芯、绿茶",
+    "baseNotes": "白苔、麝香",
+    "category": "incense",
+    "description": "线香版竹林意境，清新淡雅，余韵悠长。"
+  },
+  {
+    "id": "f005",
+    "name": "午夜鸢尾",
+    "topNotes": "醛、香柠檬",
+    "middleNotes": "鸢尾、紫罗兰",
+    "baseNotes": "零陵香豆、橡苔、皮革",
+    "category": "perfume",
+    "description": "粉质鸢尾与皮革的对比，神秘而优雅。"
+  },
+  {
+    "id": "f006",
+    "name": "桂月秋香",
+    "topNotes": "金桂、橙花",
+    "middleNotes": "桂花、茉莉",
+    "baseNotes": "檀木、龙涎",
+    "category": "incense",
+    "description": "中秋时节的桂花线香，甜润而不腻。"
+  },
+  {
+    "id": "f007",
+    "name": "海盐柑橘",
+    "topNotes": "西西里柠檬、海盐、葡萄柚",
+    "middleNotes": "橙花、迷迭香",
+    "baseNotes": "浮木、琥珀、麝香",
+    "category": "perfume",
+    "description": "夏日海边的清爽柑橘调，带有微微咸感。"
+  },
+  {
+    "id": "f008",
+    "name": "松烟墨韵",
+    "topNotes": "松针、柏 resin",
+    "middleNotes": "墨香、龙脑",
+    "baseNotes": "沉香、炭木",
+    "category": "incense",
+    "description": "文人书房线香，松烟与墨韵交织。"
+  },
+  {
+    "id": "f009",
+    "name": "丝绒可可",
+    "topNotes": "粉红胡椒、朗姆酒",
+    "middleNotes": "可可、玫瑰",
+    "baseNotes": "香草、安息香、檀香",
+    "category": "perfume",
+    "description": "美食调香水，可可与玫瑰的丝滑融合。"
+  },
+  {
+    "id": "f010",
+    "name": "兰若幽兰",
+    "topNotes": "兰花、薄荷",
+    "middleNotes": "建兰、蕙兰",
+    "baseNotes": "白檀、龙涎",
+    "category": "incense",
+    "description": "幽兰线香，冷冽中透出兰花的清芬。"
+  },
+  {
+    "id": "f011",
+    "name": "烟波茶语",
+    "topNotes": " bergamot、白茶",
+    "middleNotes": "龙井、茉莉",
+    "baseNotes": "白麝香、愈创木",
+    "category": "perfume",
+    "description": "东方茶调，龙井与茉莉的淡雅组合。"
+  },
+  {
+    "id": "f012",
+    "name": "瑞龙呈祥",
+    "topNotes": "龙脑、冰片",
+    "middleNotes": "龙涎香、乳香",
+    "baseNotes": "沉香、安息香",
+    "category": "incense",
+    "description": "节庆用线香，龙涎与沉香的祥瑞之气。"
+  },
+  {
+    "id": "f013",
+    "name": "琥珀夕照",
+    "topNotes": "橙花、肉桂",
+    "middleNotes": "琥珀、 labdanum",
+    "baseNotes": "香草、 benzoin、 patchouli",
+    "category": "perfume",
+    "description": "温暖琥珀调，如夕阳余晖般柔和。"
+  },
+  {
+    "id": "f014",
+    "name": "梅雪初晴",
+    "topNotes": "梅花、雪水",
+    "middleNotes": "腊梅、绿萼梅",
+    "baseNotes": "白檀、龙脑",
+    "category": "incense",
+    "description": "冬日梅花线香，清冷中带着梅花的暗香。"
+  },
+  {
+    "id": "f015",
+    "name": "森林漫步",
+    "topNotes": "杜松子、罗勒",
+    "middleNotes": "松木、冷杉",
+    "baseNotes": " vetiver、 moss、 cedar",
+    "category": "perfume",
+    "description": "木质馥奇调，仿佛穿行于针叶林。"
+  },
+  {
+    "id": "f016",
+    "name": "紫气东来",
+    "topNotes": " lavender、紫罗兰",
+    "middleNotes": "薰衣草、丁香",
+    "baseNotes": "广藿香、麝香",
+    "category": "incense",
+    "description": "薰衣草线香，紫气氤氲，安神助眠。"
+  },
+  {
+    "id": "f017",
+    "name": "无花果园",
+    "topNotes": "无花果叶、青绿",
+    "middleNotes": "无花果、奶香",
+    "baseNotes": "雪松、 woody notes",
+    "category": "perfume",
+    "description": "绿调无花果，叶与果的层次丰富。"
+  },
+  {
+    "id": "f018",
+    "name": "宝相庄严",
+    "topNotes": " saffron、乳香",
+    "middleNotes": "沉香、没药",
+    "baseNotes": "龙涎、安息香",
+    "category": "incense",
+    "description": "供佛线香，庄重肃穆，香气醇厚。"
+  },
+  {
+    "id": "f019",
+    "name": "都市霓虹",
+    "topNotes": "粉红葡萄柚、电子醛",
+    "middleNotes": "鸢尾、金属感",
+    "baseNotes": " ambroxan、白麝香",
+    "category": "perfume",
+    "description": "现代都市感香水，明亮而前卫。"
+  },
+  {
+    "id": "f020",
+    "name": "荷风送香",
+    "topNotes": "荷叶、水生",
+    "middleNotes": "荷花、睡莲",
+    "baseNotes": "白苔、麝香",
+    "category": "incense",
+    "description": "夏日荷塘线香，荷风送爽，清香远溢。"
+  },
+  {
+    "id": "f021",
+    "name": "烟熏乌木",
+    "topNotes": " saffron、玫瑰",
+    "middleNotes": "乌木、沉香",
+    "baseNotes": " leather、 amber、 patchouli",
+    "category": "perfume",
+    "description": "东方木质调，乌木与玫瑰的奢华碰撞。"
+  },
+  {
+    "id": "f022",
+    "name": "云深不知处",
+    "topNotes": "云雾、松针",
+    "middleNotes": "灵芝、茯苓",
+    "baseNotes": "老山檀、龙涎",
+    "category": "incense",
+    "description": "深山古刹线香，云深雾绕，禅意悠远。"
+  }
+]
