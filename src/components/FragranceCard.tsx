@@ -1,19 +1,25 @@
 import { Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 import type { Fragrance } from '../types';
 
 interface FragranceCardProps {
   fragrance: Fragrance;
 }
 
-/**
- * Mock 香调示例卡片
- */
 export function FragranceCard({ fragrance }: FragranceCardProps) {
+  const navigate = useNavigate();
   const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
   const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      style={{ cursor: 'pointer' }}
+      onClick={() => navigate(`/library/${fragrance.id}`)}
+    >
       <Group justify="space-between" mb="xs">
         <Text fw={600} size="lg">
           {fragrance.name}
