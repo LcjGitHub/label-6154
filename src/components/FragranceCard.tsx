@@ -51,15 +51,6 @@ export function FragranceCard({ fragrance }: FragranceCardProps) {
           </Badge>
           <ActionIcon
             variant="subtle"
-            color="blue"
-            onClick={handleToggleComparison}
-            title={inComparison ? '移出对比' : canAddMore() ? '加入对比' : '对比已满（最多3款）'}
-            disabled={!inComparison && !canAddMore()}
-          >
-            <IconColumns size={18} fill={inComparison ? '#3b82f6' : 'none'} />
-          </ActionIcon>
-          <ActionIcon
-            variant="subtle"
             color="red"
             onClick={(e) => {
               e.stopPropagation();

@@ -13,6 +13,9 @@ interface ComparisonState {
   canAddMore: () => boolean;
 }
 
+/**
+ * 对比列表 Zustand store，localStorage 持久化，最多同时对比 3 款
+ */
 export const useComparisonStore = create<ComparisonState>()(
   persist(
     (set, get) => ({
