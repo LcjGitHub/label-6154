@@ -1,58 +1,66 @@
 import { Badge, Card, Group, Stack, Text } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import type { Fragrance } from '../types';
 
 interface FragranceCardProps {
   fragrance: Fragrance;
 }
 
+/**
+ * Mock 香调示例卡片：点击跳转到香调详情页
+ */
 export function FragranceCard({ fragrance }: FragranceCardProps) {
-  const navigate = useNavigate();
   const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
   const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
 
   return (
-    <Card
-      shadow="sm"
-      padding="lg"
-      radius="md"
-      withBorder
-      style={{ cursor: 'pointer' }}
-      onClick={() => navigate(`/library/${fragrance.id}`)}
+    <Link
+      to={`/library/${fragrance.id}`}
+      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
     >
-      <Group justify="space-between" mb="xs">
-        <Text fw={600} size="lg">
-          {fragrance.name}
-        </Text>
-        <Badge color={categoryColor} variant="light">
-          {categoryLabel}
-        </Badge>
-      </Group>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        style={{ cursor: 'pointer', transition: 'box-shadow 0.2s ease' }}
+        onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)')}
+        onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '')}
+      >
+        <Group justify="space-between" mb="xs">
+          <Text fw={600} size="lg">
+            {fragrance.name}
+          </Text>
+          <Badge color={categoryColor} variant="light">
+            {categoryLabel}
+          </Badge>
+        </Group>
 
-      <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
-        {fragrance.description}
-      </Text>
+        <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
+          {fragrance.description}
+        </Text>
 
-      <Stack gap={4}>
-        <Text size="sm">
-          <Text span fw={500} c="teal">
-            前调：
+        <Stack gap={4}>
+          <Text size="sm">
+            <Text span fw={500} c="teal">
+              前调：
+            </Text>
+            {fragrance.topNotes}
           </Text>
-          {fragrance.topNotes}
-        </Text>
-        <Text size="sm">
-          <Text span fw={500} c="blue">
-            中调：
+          <Text size="sm">
+            <Text span fw={500} c="blue">
+              中调：
+            </Text>
+            {fragrance.middleNotes}
           </Text>
-          {fragrance.middleNotes}
-        </Text>
-        <Text size="sm">
-          <Text span fw={500} c="violet">
-            后调：
+          <Text size="sm">
+            <Text span fw={500} c="violet">
+              后调：
+            </Text>
+            {fragrance.baseNotes}
           </Text>
-          {fragrance.baseNotes}
-        </Text>
-      </Stack>
-    </Card>
+        </Stack>
+      </Card>
+    </Link>
   );
 }

@@ -6,6 +6,9 @@ import type { Fragrance } from '../types';
 
 const fragrances = fragrancesData as Fragrance[];
 
+/**
+ * 香调详情页：展示指定香调的完整名称、分类、前中后调与描述，顶部提供返回按钮
+ */
 export function FragranceDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -37,9 +40,13 @@ export function FragranceDetailPage() {
         返回示例库
       </Button>
 
+      <Title order={2} mb="md">
+        香调详情
+      </Title>
+
       <Paper shadow="sm" radius="md" p="xl" withBorder>
         <Group justify="space-between" mb="sm">
-          <Title order={2}>{fragrance.name}</Title>
+          <Title order={3}>{fragrance.name}</Title>
           <Badge color={categoryColor} variant="light" size="lg">
             {categoryLabel}
           </Badge>
