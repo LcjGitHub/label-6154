@@ -1,10 +1,13 @@
 import { Grid, Group, Select, TextInput, Title } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import fragrancesData from '../mock/fragrances.json';
 import { FragranceCard } from '../components/FragranceCard';
+import { NoteFormModal } from '../components/NoteFormModal';
+import { useNotesStore } from '../store/notesStore';
 import { searchByName } from '../utils/search';
-import type { Fragrance } from '../types';
+import type { Fragrance, NoteFormValues } from '../types';
 
 const fragrances = fragrancesData as Fragrance[];
 
@@ -14,6 +17,9 @@ const fragrances = fragrancesData as Fragrance[];
 export function LibraryPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string | null>(null);
+  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+  const [prefillFragrance, setPrefillFragrance] = useState<Fragrance | null>(null);
+  const { addNote } = useNotesStore();
 
   const filtered = useMemo(() => {
     let result = searchByName(fragrances, query);
@@ -22,6 +28,21 @@ export function LibraryPage() {
     }
     return result;
   }, [query, category]);
+
+  const handleQuickNote = (fragrance: Fragrance) => {
+    setPrefillFragrance(fragrance);
+    openForm();
+  };
+
+  const handleSubmit = (values: NoteFormValues) => {
+    addNote(values);
+    setPrefillFragrance(null);
+  };
+
+  const handleClose = () => {
+    closeForm();
+    setPrefillFragrance(null);
+  };
 
   return (
     <>
@@ -53,7 +74,7 @@ export function LibraryPage() {
       <Grid>
         {filtered.map((fragrance) => (
           <Grid.Col key={fragrance.id} span={{ base: 12, sm: 6, lg: 4 }}>
-            <FragranceCard fragrance={fragrance} />
+            <FragranceCard fragrance={fragrance} onQuickNote={handleQuickNote} />
           </Grid.Col>
         ))}
       </Grid>
@@ -63,6 +84,14 @@ export function LibraryPage() {
           未找到匹配的香调
         </Title>
       )}
+
+      <NoteFormModal
+        opened={formOpened}
+        onClose={handleClose}
+        onSubmit={handleSubmit}
+        prefillFragrance={prefillFragrance}
+        title="记为笔记"
+      />
     </>
   );
 }

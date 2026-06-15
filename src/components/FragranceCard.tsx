@@ -1,5 +1,5 @@
 import { ActionIcon, Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
-import { IconColumns, IconHeart } from '@tabler/icons-react';
+import { IconColumns, IconHeart, IconNotes } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useComparisonStore } from '../store/comparisonStore';
@@ -7,6 +7,7 @@ import type { Fragrance } from '../types';
 
 interface FragranceCardProps {
   fragrance: Fragrance;
+  onQuickNote?: (fragrance: Fragrance) => void;
 }
 
 /**
@@ -88,7 +89,21 @@ export function FragranceCard({ fragrance }: FragranceCardProps) {
         </Text>
       </Stack>
 
-      <Group mt="md" justify="flex-end">
+      <Group mt="md" justify="space-between">
+        {onQuickNote && (
+          <Button
+            size="xs"
+            variant="light"
+            color="teal"
+            onClick={(e) => {
+              e.stopPropagation();
+              onQuickNote(fragrance);
+            }}
+            leftSection={<IconNotes size={14} />}
+          >
+            记为笔记
+          </Button>
+        )}
         <Button
           size="xs"
           variant={inComparison ? 'filled' : 'light'}

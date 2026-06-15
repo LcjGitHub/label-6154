@@ -2,13 +2,14 @@ import { Button, Checkbox, Group, Modal, Rating, Stack, Text, Textarea, TextInpu
 import { useForm, zodResolver } from '@mantine/form';
 import { useEffect } from 'react';
 import { noteFormSchema } from '../schemas/noteForm';
-import { NOTE_TAGS, NOTE_TAG_COLORS, type Note, type NoteFormValues, type NoteTag } from '../types';
+import { NOTE_TAGS, NOTE_TAG_COLORS, type Fragrance, type Note, type NoteFormValues, type NoteTag } from '../types';
 
 interface NoteFormModalProps {
   opened: boolean;
   onClose: () => void;
   onSubmit: (values: NoteFormValues) => void;
   initialValues?: Note | null;
+  prefillFragrance?: Fragrance | null;
   title: string;
 }
 
@@ -30,6 +31,7 @@ export function NoteFormModal({
   onClose,
   onSubmit,
   initialValues,
+  prefillFragrance,
   title,
 }: NoteFormModalProps) {
   const form = useForm<NoteFormValues>({
@@ -49,12 +51,22 @@ export function NoteFormModal({
           remark: initialValues.remark,
           tags: initialValues.tags ?? [],
         });
+      } else if (prefillFragrance) {
+        form.setValues({
+          name: prefillFragrance.name,
+          topNotes: prefillFragrance.topNotes,
+          middleNotes: prefillFragrance.middleNotes,
+          baseNotes: prefillFragrance.baseNotes,
+          rating: 3,
+          remark: '',
+          tags: [],
+        });
       } else {
         form.setValues(emptyValues);
       }
       form.clearErrors();
     }
-  }, [opened, initialValues]);
+  }, [opened, initialValues, prefillFragrance]);
 
   const handleSubmit = form.onSubmit((values) => {
     onSubmit(values);
