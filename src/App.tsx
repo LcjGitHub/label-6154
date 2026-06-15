@@ -9,6 +9,7 @@ import { ComparisonPage } from './pages/ComparisonPage';
 import { RecentHistoryPage } from './pages/RecentHistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SearchPage } from './pages/SearchPage';
+import { GuidePage } from './pages/GuidePage';
 
 export function App() {
   return (
@@ -24,6 +25,7 @@ export function App() {
         <Route path="notes" element={<NotesPage />} />
         <Route path="statistics" element={<StatisticsPage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="guide" element={<GuidePage />} />
       </Route>
     </Routes>
   );

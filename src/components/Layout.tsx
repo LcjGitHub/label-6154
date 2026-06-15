@@ -19,6 +19,7 @@ import {
   IconColumns,
   IconDownload,
   IconHeart,
+  IconHelp,
   IconNotes,
   IconSearch,
   IconSettings,
@@ -115,6 +116,7 @@ export function Layout() {
     { to: '/notes', label: '我的笔记', icon: IconNotes },
     { to: '/statistics', label: '数据统计', icon: IconChartBar },
     { to: '/settings', label: '设置', icon: IconSettings },
+    { to: '/guide', label: '使用指南', icon: IconHelp },
   ];
 
   return (
