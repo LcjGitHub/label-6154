@@ -1,5 +1,4 @@
 import { Grid, Group, Select, TextInput, Title } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import fragrancesData from '../mock/fragrances.json';
@@ -17,9 +16,12 @@ const fragrances = fragrancesData as Fragrance[];
 export function LibraryPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string | null>(null);
-  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+  const [formOpened, setFormOpened] = useState(false);
   const [prefillFragrance, setPrefillFragrance] = useState<Fragrance | null>(null);
   const { addNote } = useNotesStore();
+
+  const openForm = () => setFormOpened(true);
+  const closeForm = () => setFormOpened(false);
 
   const filtered = useMemo(() => {
     let result = searchByName(fragrances, query);

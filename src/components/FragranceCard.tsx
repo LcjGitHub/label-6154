@@ -13,7 +13,7 @@ interface FragranceCardProps {
 /**
  * Mock 香调示例卡片：点击跳转到香调详情页
  */
-export function FragranceCard({ fragrance }: FragranceCardProps) {
+export function FragranceCard({ fragrance, onQuickNote }: FragranceCardProps) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const { addToComparison, removeFromComparison, isInComparison, canAddMore } = useComparisonStore();

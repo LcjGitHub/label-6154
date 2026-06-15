@@ -1,5 +1,4 @@
 import { Badge, Button, Grid, Group, Modal, Stack, Text, TextInput, Title } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { NoteCard } from '../components/NoteCard';
@@ -15,10 +14,15 @@ export function NotesPage() {
   const { notes, addNote, updateNote, deleteNote } = useNotesStore();
   const [query, setQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
-  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
-  const [deleteOpened, { open: openDelete, close: closeDelete }] = useDisclosure(false);
+  const [formOpened, setFormOpened] = useState(false);
+  const [deleteOpened, setDeleteOpened] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const openForm = () => setFormOpened(true);
+  const closeForm = () => setFormOpened(false);
+  const openDelete = () => setDeleteOpened(true);
+  const closeDelete = () => setDeleteOpened(false);
 
   const filtered = useMemo(() => {
     const byName = searchNotesByName(notes, query);
