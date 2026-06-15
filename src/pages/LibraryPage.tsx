@@ -5,7 +5,12 @@ import fragrancesData from '../mock/fragrances.json';
 import { FragranceCard } from '../components/FragranceCard';
 import { NoteFormModal } from '../components/NoteFormModal';
 import { useNotesStore } from '../store/notesStore';
-import { searchFragranceFullText } from '../utils/search';
+import {
+  searchFragranceFullText,
+  sortFragrances,
+  FRAGRANCE_SORT_OPTIONS,
+  type FragranceSortKey,
+} from '../utils/search';
 import type { Fragrance, NoteFormValues } from '../types';
 
 const fragrances = fragrancesData as Fragrance[];
@@ -16,6 +21,7 @@ const fragrances = fragrancesData as Fragrance[];
 export function LibraryPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<FragranceSortKey>('nameAsc');
   const [formOpened, setFormOpened] = useState(false);
   const [prefillFragrance, setPrefillFragrance] = useState<Fragrance | null>(null);
   const { addNote } = useNotesStore();
@@ -28,8 +34,8 @@ export function LibraryPage() {
     if (category) {
       result = result.filter((f) => f.category === category);
     }
-    return result;
-  }, [query, category]);
+    return sortFragrances(result, sortKey);
+  }, [query, category, sortKey]);
 
   const handleQuickNote = (fragrance: Fragrance) => {
     setPrefillFragrance(fragrance);
@@ -69,6 +75,13 @@ export function LibraryPage() {
           ]}
           value={category}
           onChange={setCategory}
+          w={160}
+        />
+        <Select
+          placeholder="排序方式"
+          data={FRAGRANCE_SORT_OPTIONS}
+          value={sortKey}
+          onChange={(value) => value && setSortKey(value as FragranceSortKey)}
           w={160}
         />
       </Group>

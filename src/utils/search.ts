@@ -146,3 +146,44 @@ export function filterNotesByMinRating<T extends Note>(items: T[], minRating: nu
   }
   return items.filter((note) => note.rating >= minRating);
 }
+
+/** 香调排序方式 */
+export type FragranceSortKey = 'nameAsc' | 'nameDesc' | 'categoryGroup';
+
+/** 香调排序选项列表 */
+export const FRAGRANCE_SORT_OPTIONS: { value: FragranceSortKey; label: string }[] = [
+  { value: 'nameAsc', label: '名称升序' },
+  { value: 'nameDesc', label: '名称降序' },
+  { value: 'categoryGroup', label: '按分类分组' },
+];
+
+const CATEGORY_ORDER: Record<string, number> = {
+  perfume: 0,
+  incense: 1,
+};
+
+/**
+ * 对香调列表进行排序
+ * @param items - 待排序香调列表
+ * @param sortKey - 排序方式
+ */
+export function sortFragrances<T extends Fragrance>(items: T[], sortKey: FragranceSortKey): T[] {
+  const sorted = [...items];
+  switch (sortKey) {
+    case 'nameAsc':
+      sorted.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
+      break;
+    case 'nameDesc':
+      sorted.sort((a, b) => b.name.localeCompare(a.name, 'zh-CN'));
+      break;
+    case 'categoryGroup':
+      sorted.sort((a, b) => {
+        const categoryA = CATEGORY_ORDER[a.category] ?? 99;
+        const categoryB = CATEGORY_ORDER[b.category] ?? 99;
+        if (categoryA !== categoryB) return categoryA - categoryB;
+        return a.name.localeCompare(b.name, 'zh-CN');
+      });
+      break;
+  }
+  return sorted;
+}
