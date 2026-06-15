@@ -1,13 +1,14 @@
 import { Card, Grid, Group, Progress, Stack, Text, Title } from '@mantine/core';
-import { IconChartBar, IconNotes, IconStar, IconFlask2 } from '@tabler/icons-react';
+import { IconChartBar, IconNotes, IconStar, IconFlask2, IconTags } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import fragrancesData from '../mock/fragrances.json';
 import { useNotesStore } from '../store/notesStore';
-import type { Fragrance } from '../types';
+import { NOTE_TAGS, NOTE_TAG_COLORS, type Fragrance, type NoteTag } from '../types';
 import {
   calculateNotesStatistics,
   calculateLibraryStatistics,
   getRatingPercentage,
+  getTagPercentage,
 } from '../utils/statistics';
 
 const fragrances = fragrancesData as Fragrance[];
@@ -108,6 +109,33 @@ function CategoryBar({ label, count, total, color }: CategoryBarProps) {
   );
 }
 
+interface TagBarProps {
+  tag: NoteTag;
+  count: number;
+  percentage: number;
+}
+
+/** 标签统计进度条 */
+function TagBar({ tag, count, percentage }: TagBarProps) {
+  return (
+    <Group gap="sm" align="center">
+      <Text w={60} size="sm" fw={500} ta="right">
+        {tag}
+      </Text>
+      <Progress
+        value={percentage}
+        color={NOTE_TAG_COLORS[tag]}
+        size="lg"
+        style={{ flex: 1 }}
+        radius="sm"
+      />
+      <Text w={80} size="sm" c="dimmed" ta="right">
+        {count} 条 ({percentage.toFixed(1)}%)
+      </Text>
+    </Group>
+  );
+}
+
 /**
  * 数据统计页面：展示笔记统计与示例库统计概览
  */
@@ -184,6 +212,47 @@ export function StatisticsPage() {
                 />
               ))}
             </Stack>
+          </Card>
+
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Group mb="md" justify="space-between">
+              <Group gap="sm" align="center">
+                <IconTags size={20} />
+                <Text size="lg" fw={600}>
+                  标签分布
+                </Text>
+              </Group>
+              <Text size="sm" c="dimmed">
+                共{' '}
+                {notesStats.tagDistribution.日常 +
+                  notesStats.tagDistribution.约会 +
+                  notesStats.tagDistribution.工作 +
+                  notesStats.tagDistribution.睡前}{' '}
+                条标签使用
+              </Text>
+            </Group>
+            {notesStats.tagDistribution.日常 +
+              notesStats.tagDistribution.约会 +
+              notesStats.tagDistribution.工作 +
+              notesStats.tagDistribution.睡前 ===
+            0 ? (
+              <Text c="dimmed" ta="center" py="xl" size="lg">
+                还没有添加标签，编辑笔记添加标签后即可查看统计
+              </Text>
+            ) : (
+              <Stack gap="md">
+                {NOTE_TAGS.map((tag) => (
+                  <TagBar
+                    key={tag}
+                    tag={tag}
+                    count={
+                      notesStats.tagDistribution[tag as keyof typeof notesStats.tagDistribution]
+                    }
+                    percentage={getTagPercentage(notesStats.tagDistribution, tag)}
+                  />
+                ))}
+              </Stack>
+            )}
           </Card>
         </>
       )}
