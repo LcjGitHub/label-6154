@@ -25,6 +25,28 @@ export function searchByName<T extends Pick<Fragrance, 'name'>>(
 }
 
 /**
+ * 全文模糊搜索香调列表（匹配名称、前调、中调、后调、描述）
+ * @param items - 待搜索列表
+ * @param query - 搜索关键词
+ */
+export function searchFragranceFullText<
+  T extends Pick<Fragrance, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'description'>
+>(items: T[], query: string): T[] {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return items;
+  }
+
+  const fuse = new Fuse(items, {
+    keys: ['name', 'topNotes', 'middleNotes', 'baseNotes', 'description'],
+    threshold: 0.4,
+    ignoreLocation: true,
+  });
+
+  return fuse.search(trimmed).map((result) => result.item);
+}
+
+/**
  * 按名称模糊搜索笔记列表
  * @param items - 待搜索笔记
  * @param query - 搜索关键词

@@ -5,7 +5,7 @@ import fragrancesData from '../mock/fragrances.json';
 import { FragranceCard } from '../components/FragranceCard';
 import { NoteFormModal } from '../components/NoteFormModal';
 import { useNotesStore } from '../store/notesStore';
-import { searchByName } from '../utils/search';
+import { searchFragranceFullText } from '../utils/search';
 import type { Fragrance, NoteFormValues } from '../types';
 
 const fragrances = fragrancesData as Fragrance[];
@@ -24,7 +24,7 @@ export function LibraryPage() {
   const closeForm = () => setFormOpened(false);
 
   const filtered = useMemo(() => {
-    let result = searchByName(fragrances, query);
+    let result = searchFragranceFullText(fragrances, query);
     if (category) {
       result = result.filter((f) => f.category === category);
     }
@@ -54,7 +54,7 @@ export function LibraryPage() {
 
       <Group mb="lg" align="flex-end">
         <TextInput
-          placeholder="按名称搜索..."
+          placeholder="搜索名称、香调或描述..."
           leftSection={<IconSearch size={16} />}
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}
