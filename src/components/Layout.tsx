@@ -20,6 +20,7 @@ import {
   IconDownload,
   IconHeart,
   IconNotes,
+  IconSettings,
   IconUpload,
 } from '@tabler/icons-react';
 import { useRef, useState } from 'react';
@@ -111,6 +112,7 @@ export function Layout() {
     { to: '/favorites', label: '我的收藏', icon: IconHeart, badge: favorites.length },
     { to: '/notes', label: '我的笔记', icon: IconNotes },
     { to: '/statistics', label: '数据统计', icon: IconChartBar },
+    { to: '/settings', label: '设置', icon: IconSettings },
   ];
 
   return (

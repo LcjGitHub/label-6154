@@ -32,7 +32,7 @@ export function ComparisonPage() {
     return (
       <Container size="lg" py="xl">
         <Stack align="center" gap="lg" py={40}>
-          <IconColumns size={64} stroke={1.5} color="#adb5bd" />
+          <IconColumns size={64} stroke={1.5} color="var(--mantine-color-dimmed)" />
           <Stack gap={4} align="center">
             <Title order={3} c="dimmed">
               暂无对比项
@@ -78,7 +78,7 @@ export function ComparisonPage() {
           <Table striped highlightOnHover withTableBorder verticalSpacing="md">
             <Table.Thead>
               <Table.Tr>
-                <Table.Th w={100} style={{ backgroundColor: '#f8f9fa' }}>
+                <Table.Th w={100} style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                   <Text fw={600}>属性</Text>
                 </Table.Th>
                 {comparisonList.map((fragrance) => (
@@ -112,7 +112,7 @@ export function ComparisonPage() {
                 {Array.from({ length: 3 - comparisonList.length }).map((_, i) => (
                   <Table.Th
                     key={`empty-${i}`}
-                    style={{ minWidth: 240, backgroundColor: '#f8f9fa' }}
+                    style={{ minWidth: 240, backgroundColor: 'var(--mantine-color-default-hover)' }}
                   >
                     <Stack align="center" justify="center" h={60}>
                       <Text size="sm" c="dimmed">
@@ -130,7 +130,7 @@ export function ComparisonPage() {
             <Table.Tbody>
               {rows.map((row) => (
                 <Table.Tr key={row.key}>
-                  <Table.Td style={{ backgroundColor: '#f8f9fa' }}>
+                  <Table.Td style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}>
                     <Text fw={500} c={row.color || undefined}>
                       {row.label}
                     </Text>
@@ -147,7 +147,10 @@ export function ComparisonPage() {
                     </Table.Td>
                   ))}
                   {Array.from({ length: 3 - comparisonList.length }).map((_, i) => (
-                    <Table.Td key={`empty-${row.key}-${i}`} style={{ backgroundColor: '#fafafa' }}>
+                    <Table.Td
+                      key={`empty-${row.key}-${i}`}
+                      style={{ backgroundColor: 'var(--mantine-color-default-hover)' }}
+                    >
                       <Text size="sm" c="dimmed" ta="center">
                         —
                       </Text>

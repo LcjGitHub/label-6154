@@ -7,6 +7,7 @@ import { FragranceDetailPage } from './pages/FragranceDetailPage';
 import { StatisticsPage } from './pages/StatisticsPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { RecentHistoryPage } from './pages/RecentHistoryPage';
+import { SettingsPage } from './pages/SettingsPage';
 
 export function App() {
   return (
@@ -20,6 +21,7 @@ export function App() {
         <Route path="comparison" element={<ComparisonPage />} />
         <Route path="notes" element={<NotesPage />} />
         <Route path="statistics" element={<StatisticsPage />} />
+        <Route path="settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   );
