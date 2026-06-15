@@ -10,7 +10,7 @@ interface NoteCardProps {
 }
 
 /**
- * 个人笔记卡片
+ * 个人笔记卡片：点击卡片内容区域（编辑、删除按钮除外）可查看详情
  */
 export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps) {
   const tags = note.tags ?? [];
@@ -20,17 +20,40 @@ export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps
     onViewDetail(note);
   };
 
+  const handleContentKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      onViewDetail(note);
+    }
+  };
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
+  const handleActionKeyDown = (e: React.KeyboardEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder onClick={handleContentClick} style={{ cursor: 'pointer' }}>
+    <Card
+      shadow="sm"
+      padding="lg"
+      radius="md"
+      withBorder
+      role="button"
+      tabIndex={0}
+      aria-label={`查看笔记「${note.name}」详情`}
+      onClick={handleContentClick}
+      onKeyDown={handleContentKeyDown}
+      style={{ cursor: 'pointer' }}
+    >
       <Group justify="space-between" mb="xs">
         <Text fw={600} size="lg">
           {note.name}
         </Text>
-        <Group gap="xs" onClick={handleActionClick}>
+        <Group gap="xs" onClick={handleActionClick} onKeyDown={handleActionKeyDown}>
           <Tooltip label="编辑">
             <ActionIcon variant="light" color="blue" onClick={() => onEdit(note)}>
               <IconEdit size={16} />
