@@ -10,6 +10,7 @@ import { RecentHistoryPage } from './pages/RecentHistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SearchPage } from './pages/SearchPage';
 import { GuidePage } from './pages/GuidePage';
+import { ScentAdvancedFilter } from './pages/ScentAdvancedFilter';
 
 export function App() {
   return (
@@ -19,6 +20,7 @@ export function App() {
         <Route path="search" element={<SearchPage />} />
         <Route path="library" element={<LibraryPage />} />
         <Route path="library/:id" element={<FragranceDetailPage />} />
+        <Route path="scent-filter" element={<ScentAdvancedFilter />} />
         <Route path="recent-history" element={<RecentHistoryPage />} />
         <Route path="favorites" element={<FavoritesPage />} />
         <Route path="comparison" element={<ComparisonPage />} />
