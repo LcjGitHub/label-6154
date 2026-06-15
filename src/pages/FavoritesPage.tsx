@@ -1,8 +1,10 @@
-import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Card, Group, Select, Stack, Text, Title } from '@mantine/core';
 import { IconHeart } from '@tabler/icons-react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { NoteSummary } from '../components/NoteSummary';
+import { sortFragrances, FRAGRANCE_SORT_OPTIONS, type FragranceSortKey } from '../utils/search';
 
 /**
  * 收藏夹页面：展示已收藏的香调列表
@@ -10,6 +12,11 @@ import { NoteSummary } from '../components/NoteSummary';
 export function FavoritesPage() {
   const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavoritesStore();
+  const [sortKey, setSortKey] = useState<FragranceSortKey>('nameAsc');
+
+  const sortedFavorites = useMemo(() => {
+    return sortFragrances(favorites, sortKey);
+  }, [favorites, sortKey]);
 
   return (
     <>
@@ -25,6 +32,16 @@ export function FavoritesPage() {
         </Text>
       </Group>
 
+      <Group mb="md" align="flex-end">
+        <Select
+          placeholder="排序方式"
+          data={FRAGRANCE_SORT_OPTIONS}
+          value={sortKey}
+          onChange={(value) => value && setSortKey(value as FragranceSortKey)}
+          w={160}
+        />
+      </Group>
+
       {favorites.length === 0 ? (
         <Card withBorder padding="xl" ta="center">
           <Stack align="center" gap="md">
@@ -37,7 +54,7 @@ export function FavoritesPage() {
         </Card>
       ) : (
         <Stack gap="md">
-          {favorites.map((fragrance) => {
+          {sortedFavorites.map((fragrance) => {
             return (
               <Card
                 key={fragrance.id}
