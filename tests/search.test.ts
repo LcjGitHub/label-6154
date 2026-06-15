@@ -3,6 +3,7 @@ import {
   sortNotes,
   filterNotesByMinRating,
   searchFragranceFullText,
+  searchNotesFullText,
   type NoteSortKey,
 } from '../src/utils/search';
 import type { Note, Fragrance } from '../src/types';
@@ -269,6 +270,107 @@ describe('searchFragranceFullText', () => {
     const copy = [...items];
     searchFragranceFullText(items, '玫瑰');
     expect(items).toEqual(copy);
+  });
+});
+
+describe('searchNotesFullText', () => {
+  const notes: Note[] = [
+    makeNote({
+      id: '1',
+      name: '薰衣草之夜',
+      topNotes: '薰衣草',
+      middleNotes: '玫瑰',
+      baseNotes: '麝香',
+      remark: '宁静的夜晚使用',
+      tags: ['日常', '睡前'],
+    }),
+    makeNote({
+      id: '2',
+      name: '海洋微风',
+      topNotes: '海盐',
+      middleNotes: '茉莉',
+      baseNotes: '琥珀',
+      remark: '清新工作香',
+      tags: ['工作'],
+    }),
+    makeNote({
+      id: '3',
+      name: '玫瑰花园',
+      topNotes: '玫瑰',
+      middleNotes: '牡丹',
+      baseNotes: '檀香',
+      remark: '浪漫约会必备',
+      tags: ['约会'],
+    }),
+  ];
+
+  it('空数组搜索应返回空数组', () => {
+    const result = searchNotesFullText([], '薰衣草');
+    expect(result).toEqual([]);
+  });
+
+  it('空字符串查询应返回全部列表', () => {
+    const result = searchNotesFullText(notes, '');
+    expect(result).toEqual(notes);
+  });
+
+  it('纯空格查询应返回全部列表', () => {
+    const result = searchNotesFullText(notes, '   ');
+    expect(result).toEqual(notes);
+  });
+
+  it('按名称搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '薰衣草之夜');
+    expect(result.length).toBeGreaterThanOrEqual(1);
+    expect(result.some((n) => n.id === '1')).toBe(true);
+  });
+
+  it('按 topNotes 搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '薰衣草');
+    expect(result.some((n) => n.id === '1')).toBe(true);
+  });
+
+  it('按 middleNotes 搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '玫瑰');
+    expect(result.length).toBeGreaterThanOrEqual(2);
+    expect(result.some((n) => n.id === '1')).toBe(true);
+    expect(result.some((n) => n.id === '3')).toBe(true);
+  });
+
+  it('按 baseNotes 搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '麝香');
+    expect(result.some((n) => n.id === '1')).toBe(true);
+  });
+
+  it('按 remark 搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '工作');
+    expect(result.some((n) => n.id === '2')).toBe(true);
+  });
+
+  it('按 tags 搜索应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '睡前');
+    expect(result.some((n) => n.id === '1')).toBe(true);
+  });
+
+  it('按 tags 搜索多个标签应返回对应结果', () => {
+    const result = searchNotesFullText(notes, '约会');
+    expect(result.some((n) => n.id === '3')).toBe(true);
+  });
+
+  it('模糊搜索标签应返回匹配结果', () => {
+    const result = searchNotesFullText(notes, '日');
+    expect(result.some((n) => n.id === '1')).toBe(true);
+  });
+
+  it('无匹配时应返回空数组', () => {
+    const result = searchNotesFullText(notes, '不存在的香调');
+    expect(result).toEqual([]);
+  });
+
+  it('搜索不修改原数组', () => {
+    const copy = [...notes];
+    searchNotesFullText(notes, '玫瑰');
+    expect(notes).toEqual(copy);
   });
 });
 

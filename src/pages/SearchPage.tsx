@@ -48,7 +48,7 @@ export function SearchPage() {
       </Group>
 
       <TextInput
-        placeholder="搜索香调名称、前中后调、描述或笔记名称、备注..."
+        placeholder="搜索香调名称、前中后调、描述或笔记名称、香调、备注、标签..."
         leftSection={<IconSearch size={16} />}
         value={query}
         onChange={(e) => handleSearch(e.currentTarget.value)}

@@ -19,7 +19,7 @@ import { NoteFormModal } from '../components/NoteFormModal';
 import { useNotesStore } from '../store/notesStore';
 import { NOTE_TAGS, NOTE_TAG_COLORS, type Note, type NoteFormValues, type NoteTag } from '../types';
 import {
-  searchNotesByName,
+  searchNotesFullText,
   sortNotes,
   filterNotesByMinRating,
   NOTE_SORT_OPTIONS,
@@ -72,15 +72,15 @@ export function NotesPage() {
   ];
 
   const { filtered, emptyReason } = useMemo(() => {
-    const byName = searchNotesByName(notes, query);
-    if (query.trim() && byName.length === 0) {
-      return { filtered: [], emptyReason: 'name' as const };
+    const bySearch = searchNotesFullText(notes, query);
+    if (query.trim() && bySearch.length === 0) {
+      return { filtered: [], emptyReason: 'search' as const };
     }
 
     const byTags =
       selectedTags.length === 0
-        ? byName
-        : byName.filter((note) => {
+        ? bySearch
+        : bySearch.filter((note) => {
             const noteTags = note.tags ?? [];
             return selectedTags.some((tag) => noteTags.includes(tag));
           });
@@ -169,11 +169,11 @@ export function NotesPage() {
       <Stack mb="lg" gap="sm">
         <Group gap="sm" align="center">
           <TextInput
-            placeholder="按名称搜索笔记..."
+            placeholder="搜索名称、香调、备注、标签..."
             leftSection={<IconSearch size={16} />}
             value={query}
             onChange={(e) => setQuery(e.currentTarget.value)}
-            style={{ width: 280 }}
+            style={{ width: 320 }}
           />
           <Select
             placeholder="排序方式"
@@ -234,12 +234,12 @@ export function NotesPage() {
         <Text c="dimmed" ta="center" mt="xl" size="lg">
           {notes.length === 0
             ? '还没有笔记，点击「新建笔记」开始记录'
-            : emptyReason === 'name'
-              ? '未找到匹配名称的笔记'
+            : emptyReason === 'search'
+              ? `未找到包含「${query.trim()}」的笔记（可匹配名称、香调、备注、标签）`
               : emptyReason === 'tags'
-                ? '未找到匹配标签的笔记'
+                ? `未找到同时匹配「${selectedTags.join('」或「')}」标签的笔记`
                 : emptyReason === 'rating'
-                  ? '未找到达到最低评分的笔记'
+                  ? `未找到评分达到 ${minRating} 星及以上的笔记`
                   : '未找到符合条件的笔记'}
         </Text>
       ) : (

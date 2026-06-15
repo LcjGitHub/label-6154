@@ -24,12 +24,12 @@ export function searchFragranceFullText<
 }
 
 /**
- * 全文模糊搜索笔记列表（匹配名称、前调、中调、后调、备注）
+ * 全文模糊搜索笔记列表（匹配名称、前调、中调、后调、备注、标签）
  * @param items - 待搜索笔记
  * @param query - 搜索关键词
  */
 export function searchNotesFullText<
-  T extends Pick<Note, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'remark'>,
+  T extends Pick<Note, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'remark' | 'tags'>,
 >(items: T[], query: string): T[] {
   const trimmed = query.trim();
   if (!trimmed) {
@@ -37,9 +37,16 @@ export function searchNotesFullText<
   }
 
   const fuse = new Fuse(items, {
-    keys: ['name', 'topNotes', 'middleNotes', 'baseNotes', 'remark'],
+    keys: ['name', 'topNotes', 'middleNotes', 'baseNotes', 'remark', 'tags'],
     threshold: 0.4,
     ignoreLocation: true,
+    getFn: (obj, path) => {
+      const value = obj[path as keyof T];
+      if (Array.isArray(value)) {
+        return value.join(' ');
+      }
+      return value as string;
+    },
   });
 
   return fuse.search(trimmed).map((result) => result.item);
