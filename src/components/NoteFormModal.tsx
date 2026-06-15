@@ -1,8 +1,25 @@
-import { Button, Checkbox, Group, Modal, Rating, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Group,
+  Modal,
+  Rating,
+  Stack,
+  Text,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useEffect } from 'react';
 import { noteFormSchema } from '../schemas/noteForm';
-import { NOTE_TAGS, NOTE_TAG_COLORS, type Fragrance, type Note, type NoteFormValues, type NoteTag } from '../types';
+import {
+  NOTE_TAGS,
+  NOTE_TAG_COLORS,
+  type Fragrance,
+  type Note,
+  type NoteFormValues,
+  type NoteTag,
+} from '../types';
 
 interface NoteFormModalProps {
   opened: boolean;
@@ -105,7 +122,10 @@ export function NoteFormModal({
           />
           <Stack gap={4}>
             <Text size="sm" fw={500}>
-              评分 <Text span c="red">*</Text>
+              评分{' '}
+              <Text span c="red">
+                *
+              </Text>
             </Text>
             <Rating
               value={form.values.rating}
@@ -127,12 +147,7 @@ export function NoteFormModal({
             >
               <Group mt="xs">
                 {NOTE_TAGS.map((tag) => (
-                  <Checkbox
-                    key={tag}
-                    value={tag}
-                    label={tag}
-                    color={NOTE_TAG_COLORS[tag]}
-                  />
+                  <Checkbox key={tag} value={tag} label={tag} color={NOTE_TAG_COLORS[tag]} />
                 ))}
               </Group>
             </Checkbox.Group>

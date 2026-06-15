@@ -44,6 +44,6 @@ export const useFavoritesStore = create<FavoritesState>()(
     }),
     {
       name: 'fragrance-favorites-storage',
-    }
-  )
+    },
+  ),
 );

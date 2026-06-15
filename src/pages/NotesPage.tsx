@@ -1,4 +1,15 @@
-import { Badge, Button, Grid, Group, Modal, Select, Stack, Text, TextInput, Title } from '@mantine/core';
+import {
+  Badge,
+  Button,
+  Grid,
+  Group,
+  Modal,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { NoteCard } from '../components/NoteCard';
@@ -74,7 +85,7 @@ export function NotesPage() {
 
   const toggleTag = (tag: NoteTag) => {
     setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 

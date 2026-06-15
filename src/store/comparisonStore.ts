@@ -53,6 +53,6 @@ export const useComparisonStore = create<ComparisonState>()(
     }),
     {
       name: 'fragrance-comparison-storage',
-    }
-  )
+    },
+  ),
 );

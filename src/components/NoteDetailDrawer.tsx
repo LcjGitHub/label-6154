@@ -13,7 +13,13 @@ interface NoteDetailDrawerProps {
 /**
  * 笔记详情抽屉：从右侧滑出展示笔记完整信息，底部提供编辑、删除等快捷操作
  */
-export function NoteDetailDrawer({ opened, onClose, note, onEdit, onDelete }: NoteDetailDrawerProps) {
+export function NoteDetailDrawer({
+  opened,
+  onClose,
+  note,
+  onEdit,
+  onDelete,
+}: NoteDetailDrawerProps) {
   if (!note) return null;
 
   const tags = note.tags ?? [];
@@ -45,7 +51,10 @@ export function NoteDetailDrawer({ opened, onClose, note, onEdit, onDelete }: No
         },
       }}
     >
-      <Stack gap="lg" style={{ flex: 1, overflowY: 'auto', paddingTop: 'var(--mantine-spacing-md)' }}>
+      <Stack
+        gap="lg"
+        style={{ flex: 1, overflowY: 'auto', paddingTop: 'var(--mantine-spacing-md)' }}
+      >
         <Text fw={700} size="xl">
           {note.name}
         </Text>
@@ -110,14 +119,31 @@ export function NoteDetailDrawer({ opened, onClose, note, onEdit, onDelete }: No
         </Stack>
       </Stack>
 
-      <Group justify="space-between" pt="md" mt="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)', flexShrink: 0 }}>
+      <Group
+        justify="space-between"
+        pt="md"
+        mt="md"
+        style={{ borderTop: '1px solid var(--mantine-color-gray-2)', flexShrink: 0 }}
+      >
         <Button variant="default" onClick={onClose} style={{ flex: 1 }}>
           关闭
         </Button>
-        <Button variant="light" color="blue" leftSection={<IconEdit size={16} />} onClick={handleEdit} style={{ flex: 1 }}>
+        <Button
+          variant="light"
+          color="blue"
+          leftSection={<IconEdit size={16} />}
+          onClick={handleEdit}
+          style={{ flex: 1 }}
+        >
           编辑
         </Button>
-        <Button variant="light" color="red" leftSection={<IconTrash size={16} />} onClick={handleDelete} style={{ flex: 1 }}>
+        <Button
+          variant="light"
+          color="red"
+          leftSection={<IconTrash size={16} />}
+          onClick={handleDelete}
+          style={{ flex: 1 }}
+        >
           删除
         </Button>
       </Group>

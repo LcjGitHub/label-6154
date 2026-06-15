@@ -1,6 +1,26 @@
-import { AppShell, Badge, Burger, Button, Divider, Group, Modal, NavLink, Stack, Text, Title } from '@mantine/core';
+import {
+  AppShell,
+  Badge,
+  Burger,
+  Button,
+  Divider,
+  Group,
+  Modal,
+  NavLink,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBook, IconChartBar, IconColumns, IconDownload, IconHeart, IconNotes, IconUpload } from '@tabler/icons-react';
+import {
+  IconBook,
+  IconChartBar,
+  IconColumns,
+  IconDownload,
+  IconHeart,
+  IconNotes,
+  IconUpload,
+} from '@tabler/icons-react';
 import { useRef, useState } from 'react';
 import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
@@ -203,9 +223,7 @@ export function Layout() {
       >
         <Text c="red">{errorModal.message}</Text>
         <Group justify="flex-end" mt="md">
-          <Button onClick={() => setErrorModal((prev) => ({ ...prev, show: false }))}>
-            确定
-          </Button>
+          <Button onClick={() => setErrorModal((prev) => ({ ...prev, show: false }))}>确定</Button>
         </Group>
       </Modal>
     </AppShell>

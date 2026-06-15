@@ -67,7 +67,8 @@ export function calculateLibraryStatistics(fragrances: Fragrance[]): LibraryStat
  * 计算某一评分档位的占比
  */
 export function getRatingPercentage(distribution: RatingDistribution, rating: number): number {
-  const total = distribution[1] + distribution[2] + distribution[3] + distribution[4] + distribution[5];
+  const total =
+    distribution[1] + distribution[2] + distribution[3] + distribution[4] + distribution[5];
   if (total === 0) return 0;
   return (distribution[rating as keyof RatingDistribution] / total) * 100;
 }

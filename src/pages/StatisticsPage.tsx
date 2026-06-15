@@ -100,13 +100,7 @@ function CategoryBar({ label, count, total, color }: CategoryBarProps) {
       <Text w={60} size="sm" fw={500} ta="right">
         {label}
       </Text>
-      <Progress
-        value={percentage}
-        color={color}
-        size="lg"
-        style={{ flex: 1 }}
-        radius="sm"
-      />
+      <Progress value={percentage} color={color} size="lg" style={{ flex: 1 }} radius="sm" />
       <Text w={80} size="sm" c="dimmed" ta="right">
         {count} 款 ({percentage.toFixed(1)}%)
       </Text>
@@ -181,7 +175,11 @@ export function StatisticsPage() {
                 <RatingBar
                   key={rating}
                   rating={rating}
-                  count={notesStats.ratingDistribution[rating as keyof typeof notesStats.ratingDistribution]}
+                  count={
+                    notesStats.ratingDistribution[
+                      rating as keyof typeof notesStats.ratingDistribution
+                    ]
+                  }
                   percentage={getRatingPercentage(notesStats.ratingDistribution, rating)}
                 />
               ))}

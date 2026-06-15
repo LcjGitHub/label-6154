@@ -7,7 +7,7 @@ import type { Fragrance, Note } from '../types';
  * @param query - 搜索关键词
  */
 export function searchFragranceFullText<
-  T extends Pick<Fragrance, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'description'>
+  T extends Pick<Fragrance, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'description'>,
 >(items: T[], query: string): T[] {
   const trimmed = query.trim();
   if (!trimmed) {
@@ -28,10 +28,7 @@ export function searchFragranceFullText<
  * @param items - 待搜索笔记
  * @param query - 搜索关键词
  */
-export function searchNotesByName<T extends { name: string }>(
-  items: T[],
-  query: string
-): T[] {
+export function searchNotesByName<T extends { name: string }>(items: T[], query: string): T[] {
   const trimmed = query.trim();
   if (!trimmed) {
     return items;
@@ -62,10 +59,7 @@ export const NOTE_SORT_OPTIONS: { value: NoteSortKey; label: string }[] = [
  * @param items - 待排序笔记列表
  * @param sortKey - 排序方式
  */
-export function sortNotes<T extends Note>(
-  items: T[],
-  sortKey: NoteSortKey
-): T[] {
+export function sortNotes<T extends Note>(items: T[], sortKey: NoteSortKey): T[] {
   const sorted = [...items];
   switch (sortKey) {
     case 'updatedAt':
@@ -95,10 +89,7 @@ export function sortNotes<T extends Note>(
  * @param items - 待筛选笔记列表
  * @param minRating - 最低评分，0 表示不筛选
  */
-export function filterNotesByMinRating<T extends Note>(
-  items: T[],
-  minRating: number
-): T[] {
+export function filterNotesByMinRating<T extends Note>(items: T[], minRating: number): T[] {
   if (minRating <= 0) {
     return items;
   }

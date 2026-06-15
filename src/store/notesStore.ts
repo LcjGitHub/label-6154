@@ -43,9 +43,7 @@ export const useNotesStore = create<NotesState>()(
       updateNote: (id, values) => {
         set((state) => ({
           notes: state.notes.map((note) =>
-            note.id === id
-              ? { ...note, ...values, updatedAt: new Date().toISOString() }
-              : note
+            note.id === id ? { ...note, ...values, updatedAt: new Date().toISOString() } : note,
           ),
         }));
       },
@@ -91,6 +89,6 @@ export const useNotesStore = create<NotesState>()(
     }),
     {
       name: 'fragrance-notes-storage',
-    }
-  )
+    },
+  ),
 );

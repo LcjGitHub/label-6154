@@ -1,4 +1,15 @@
-import { ActionIcon, Badge, Box, Button, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Divider,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import { IconArrowLeft, IconHeart } from '@tabler/icons-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
@@ -20,8 +31,14 @@ export function FragranceDetailPage() {
   if (!fragrance) {
     return (
       <Stack align="center" mt="xl">
-        <Text c="dimmed" size="lg">未找到该香调</Text>
-        <Button variant="subtle" leftSection={<IconArrowLeft size={16} />} onClick={() => navigate('/library')}>
+        <Text c="dimmed" size="lg">
+          未找到该香调
+        </Text>
+        <Button
+          variant="subtle"
+          leftSection={<IconArrowLeft size={16} />}
+          onClick={() => navigate('/library')}
+        >
           返回示例库
         </Button>
       </Stack>
@@ -72,17 +89,23 @@ export function FragranceDetailPage() {
 
         <Stack gap="md">
           <Paper withBorder p="md" radius="sm" bg="teal.0">
-            <Text fw={600} size="sm" c="teal.7" mb={4}>前调</Text>
+            <Text fw={600} size="sm" c="teal.7" mb={4}>
+              前调
+            </Text>
             <Text size="md">{fragrance.topNotes}</Text>
           </Paper>
 
           <Paper withBorder p="md" radius="sm" bg="blue.0">
-            <Text fw={600} size="sm" c="blue.7" mb={4}>中调</Text>
+            <Text fw={600} size="sm" c="blue.7" mb={4}>
+              中调
+            </Text>
             <Text size="md">{fragrance.middleNotes}</Text>
           </Paper>
 
           <Paper withBorder p="md" radius="sm" bg="violet.0">
-            <Text fw={600} size="sm" c="violet.7" mb={4}>后调</Text>
+            <Text fw={600} size="sm" c="violet.7" mb={4}>
+              后调
+            </Text>
             <Text size="md">{fragrance.baseNotes}</Text>
           </Paper>
         </Stack>

@@ -32,9 +32,7 @@ export function FavoritesPage() {
             <Title order={4} c="dimmed">
               暂无收藏
             </Title>
-            <Text c="dimmed">
-              在示例库中点击卡片右上角的心形按钮，将喜欢的香调添加到收藏夹
-            </Text>
+            <Text c="dimmed">在示例库中点击卡片右上角的心形按钮，将喜欢的香调添加到收藏夹</Text>
           </Stack>
         </Card>
       ) : (
@@ -48,7 +46,9 @@ export function FavoritesPage() {
                 radius="md"
                 style={{ cursor: 'pointer', transition: 'box-shadow 0.2s ease' }}
                 onClick={() => navigate(`/library/${fragrance.id}`)}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')
+                }
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '')}
               >
                 <NoteSummary

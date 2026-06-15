@@ -1,4 +1,14 @@
-import { ActionIcon, Button, Container, Group, ScrollArea, Stack, Table, Text, Title } from '@mantine/core';
+import {
+  ActionIcon,
+  Button,
+  Container,
+  Group,
+  ScrollArea,
+  Stack,
+  Table,
+  Text,
+  Title,
+} from '@mantine/core';
 import { IconColumns, IconExternalLink, IconTrash, IconX } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useComparisonStore } from '../store/comparisonStore';
@@ -100,7 +110,10 @@ export function ComparisonPage() {
                   </Table.Th>
                 ))}
                 {Array.from({ length: 3 - comparisonList.length }).map((_, i) => (
-                  <Table.Th key={`empty-${i}`} style={{ minWidth: 240, backgroundColor: '#f8f9fa' }}>
+                  <Table.Th
+                    key={`empty-${i}`}
+                    style={{ minWidth: 240, backgroundColor: '#f8f9fa' }}
+                  >
                     <Stack align="center" justify="center" h={60}>
                       <Text size="sm" c="dimmed">
                         空位
@@ -123,10 +136,7 @@ export function ComparisonPage() {
                     </Text>
                   </Table.Td>
                   {comparisonList.map((fragrance) => (
-                    <Table.Td
-                      key={`${fragrance.id}-${row.key}`}
-                      style={{ verticalAlign: 'top' }}
-                    >
+                    <Table.Td key={`${fragrance.id}-${row.key}`} style={{ verticalAlign: 'top' }}>
                       {row.key === 'category' ? (
                         <CategoryBadge category={fragrance.category} />
                       ) : (
@@ -137,10 +147,7 @@ export function ComparisonPage() {
                     </Table.Td>
                   ))}
                   {Array.from({ length: 3 - comparisonList.length }).map((_, i) => (
-                    <Table.Td
-                      key={`empty-${row.key}-${i}`}
-                      style={{ backgroundColor: '#fafafa' }}
-                    >
+                    <Table.Td key={`empty-${row.key}-${i}`} style={{ backgroundColor: '#fafafa' }}>
                       <Text size="sm" c="dimmed" ta="center">
                         —
                       </Text>

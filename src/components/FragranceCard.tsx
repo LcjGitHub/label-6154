@@ -17,7 +17,8 @@ interface FragranceCardProps {
 export function FragranceCard({ fragrance, onQuickNote }: FragranceCardProps) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
-  const { addToComparison, removeFromComparison, isInComparison, canAddMore } = useComparisonStore();
+  const { addToComparison, removeFromComparison, isInComparison, canAddMore } =
+    useComparisonStore();
   const favorited = isFavorite(fragrance.id);
   const inComparison = isInComparison(fragrance.id);
 
