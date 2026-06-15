@@ -1,8 +1,9 @@
 import { AppShell, Badge, Burger, Group, NavLink, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBook, IconChartBar, IconHeart, IconNotes } from '@tabler/icons-react';
+import { IconBook, IconChartBar, IconColumns, IconHeart, IconNotes } from '@tabler/icons-react';
 import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
+import { useComparisonStore } from '../store/comparisonStore';
 
 /**
  * 应用布局：顶部导航 + 侧边栏
@@ -11,9 +12,11 @@ export function Layout() {
   const [opened, { toggle }] = useDisclosure();
   const location = useLocation();
   const { favorites } = useFavoritesStore();
+  const { comparisonList } = useComparisonStore();
 
   const navItems = [
     { to: '/library', label: '示例库', icon: IconBook },
+    { to: '/comparison', label: '香调对比', icon: IconColumns, badge: comparisonList.length },
     { to: '/favorites', label: '我的收藏', icon: IconHeart, badge: favorites.length },
     { to: '/notes', label: '我的笔记', icon: IconNotes },
     { to: '/statistics', label: '数据统计', icon: IconChartBar },

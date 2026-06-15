@@ -1,7 +1,8 @@
-import { ActionIcon, Badge, Card, Group, Stack, Text } from '@mantine/core';
-import { IconHeart } from '@tabler/icons-react';
+import { ActionIcon, Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { IconColumns, IconHeart } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
+import { useComparisonStore } from '../store/comparisonStore';
 import type { Fragrance } from '../types';
 
 interface FragranceCardProps {
@@ -14,9 +15,20 @@ interface FragranceCardProps {
 export function FragranceCard({ fragrance }: FragranceCardProps) {
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const { addToComparison, removeFromComparison, isInComparison, canAddMore } = useComparisonStore();
   const favorited = isFavorite(fragrance.id);
+  const inComparison = isInComparison(fragrance.id);
   const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
   const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
+
+  const handleToggleComparison = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (inComparison) {
+      removeFromComparison(fragrance.id);
+    } else {
+      addToComparison(fragrance);
+    }
+  };
 
   return (
     <Card
@@ -37,6 +49,15 @@ export function FragranceCard({ fragrance }: FragranceCardProps) {
           <Badge color={categoryColor} variant="light">
             {categoryLabel}
           </Badge>
+          <ActionIcon
+            variant="subtle"
+            color="blue"
+            onClick={handleToggleComparison}
+            title={inComparison ? '移出对比' : canAddMore() ? '加入对比' : '对比已满（最多3款）'}
+            disabled={!inComparison && !canAddMore()}
+          >
+            <IconColumns size={18} fill={inComparison ? '#3b82f6' : 'none'} />
+          </ActionIcon>
           <ActionIcon
             variant="subtle"
             color="red"
@@ -75,6 +96,19 @@ export function FragranceCard({ fragrance }: FragranceCardProps) {
           {fragrance.baseNotes}
         </Text>
       </Stack>
+
+      <Group mt="md" justify="flex-end">
+        <Button
+          size="xs"
+          variant={inComparison ? 'filled' : 'light'}
+          color={inComparison ? 'blue' : 'gray'}
+          onClick={handleToggleComparison}
+          disabled={!inComparison && !canAddMore()}
+          leftSection={<IconColumns size={14} />}
+        >
+          {inComparison ? '移出对比' : canAddMore() ? '加入对比' : '对比已满'}
+        </Button>
+      </Group>
     </Card>
   );
 }
