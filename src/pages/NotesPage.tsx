@@ -27,7 +27,7 @@ export function NotesPage() {
     }
     return byName.filter((note) => {
       const noteTags = note.tags ?? [];
-      return selectedTags.every((tag) => noteTags.includes(tag));
+      return selectedTags.some((tag) => noteTags.includes(tag));
     });
   }, [notes, query, selectedTags]);
 
@@ -37,8 +37,22 @@ export function NotesPage() {
     );
   };
 
+  const handleTagKeyDown = (e: React.KeyboardEvent, tag: NoteTag) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleTag(tag);
+    }
+  };
+
   const clearTags = () => {
     setSelectedTags([]);
+  };
+
+  const handleClearKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      clearTags();
+    }
   };
 
   const handleOpenCreate = () => {
@@ -98,17 +112,30 @@ export function NotesPage() {
             return (
               <Badge
                 key={tag}
+                role="button"
+                tabIndex={0}
+                aria-pressed={active}
+                aria-label={`${tag}标签，${active ? '已选中' : '未选中'}`}
                 color={NOTE_TAG_COLORS[tag]}
                 variant={active ? 'filled' : 'light'}
                 style={{ cursor: 'pointer' }}
                 onClick={() => toggleTag(tag)}
+                onKeyDown={(e) => handleTagKeyDown(e, tag)}
               >
                 {tag}
               </Badge>
             );
           })}
           {selectedTags.length > 0 && (
-            <Badge variant="outline" style={{ cursor: 'pointer' }} onClick={clearTags}>
+            <Badge
+              role="button"
+              tabIndex={0}
+              aria-label="清除所有标签筛选"
+              variant="outline"
+              style={{ cursor: 'pointer' }}
+              onClick={clearTags}
+              onKeyDown={handleClearKeyDown}
+            >
               清除筛选
             </Badge>
           )}
@@ -117,7 +144,11 @@ export function NotesPage() {
 
       {filtered.length === 0 ? (
         <Text c="dimmed" ta="center" mt="xl" size="lg">
-          {notes.length === 0 ? '还没有笔记，点击「新建笔记」开始记录' : '未找到匹配的笔记'}
+          {notes.length === 0
+            ? '还没有笔记，点击「新建笔记」开始记录'
+            : selectedTags.length > 0
+              ? '未找到匹配标签的笔记'
+              : '未找到匹配名称的笔记'}
         </Text>
       ) : (
         <Grid>
