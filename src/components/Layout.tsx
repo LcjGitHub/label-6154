@@ -20,6 +20,7 @@ import {
   IconDownload,
   IconHeart,
   IconNotes,
+  IconSearch,
   IconSettings,
   IconUpload,
 } from '@tabler/icons-react';
@@ -106,6 +107,7 @@ export function Layout() {
   };
 
   const navItems = [
+    { to: '/search', label: '全局搜索', icon: IconSearch },
     { to: '/library', label: '示例库', icon: IconBook },
     { to: '/comparison', label: '香调对比', icon: IconColumns, badge: comparisonList.length },
     { to: '/recent-history', label: '最近浏览', icon: IconClock, badge: history.length },

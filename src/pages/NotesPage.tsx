@@ -11,7 +11,8 @@ import {
   Title,
 } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { NoteCard } from '../components/NoteCard';
 import { NoteDetailDrawer } from '../components/NoteDetailDrawer';
 import { NoteFormModal } from '../components/NoteFormModal';
@@ -29,6 +30,7 @@ import {
  * 我的笔记页面：新建、编辑、删除笔记
  */
 export function NotesPage() {
+  const location = useLocation();
   const { notes, addNote, updateNote, deleteNote } = useNotesStore();
   const [query, setQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
@@ -47,6 +49,18 @@ export function NotesPage() {
   const closeDelete = () => setDeleteOpened(false);
   const openDetail = () => setDetailOpened(true);
   const closeDetail = () => setDetailOpened(false);
+
+  useEffect(() => {
+    const state = location.state as { openNoteId?: string } | null;
+    if (state?.openNoteId) {
+      const note = notes.find((n) => n.id === state.openNoteId);
+      if (note) {
+        setViewingNote(note);
+        setDetailOpened(true);
+      }
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, notes]);
 
   const ratingOptions = [
     { value: '0', label: '全部评分' },

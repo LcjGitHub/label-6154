@@ -8,12 +8,14 @@ import { StatisticsPage } from './pages/StatisticsPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { RecentHistoryPage } from './pages/RecentHistoryPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { SearchPage } from './pages/SearchPage';
 
 export function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Navigate to="/library" replace />} />
+        <Route path="search" element={<SearchPage />} />
         <Route path="library" element={<LibraryPage />} />
         <Route path="library/:id" element={<FragranceDetailPage />} />
         <Route path="recent-history" element={<RecentHistoryPage />} />

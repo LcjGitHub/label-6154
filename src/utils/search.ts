@@ -24,6 +24,28 @@ export function searchFragranceFullText<
 }
 
 /**
+ * 全文模糊搜索笔记列表（匹配名称、前调、中调、后调、备注）
+ * @param items - 待搜索笔记
+ * @param query - 搜索关键词
+ */
+export function searchNotesFullText<
+  T extends Pick<Note, 'name' | 'topNotes' | 'middleNotes' | 'baseNotes' | 'remark'>,
+>(items: T[], query: string): T[] {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return items;
+  }
+
+  const fuse = new Fuse(items, {
+    keys: ['name', 'topNotes', 'middleNotes', 'baseNotes', 'remark'],
+    threshold: 0.4,
+    ignoreLocation: true,
+  });
+
+  return fuse.search(trimmed).map((result) => result.item);
+}
+
+/**
  * 按名称模糊搜索笔记列表
  * @param items - 待搜索笔记
  * @param query - 搜索关键词
@@ -41,6 +63,35 @@ export function searchNotesByName<T extends { name: string }>(items: T[], query:
   });
 
   return fuse.search(trimmed).map((result) => result.item);
+}
+
+/** 全局搜索结果类型 */
+export interface GlobalSearchResult {
+  fragrances: Fragrance[];
+  notes: Note[];
+}
+
+/**
+ * 全局统一搜索：同时检索示例库香调与个人笔记
+ * @param fragrances - 示例库香调列表
+ * @param notes - 个人笔记列表
+ * @param query - 搜索关键词
+ * @returns 分类的搜索结果，香调与笔记分开返回
+ */
+export function globalSearch(
+  fragrances: Fragrance[],
+  notes: Note[],
+  query: string,
+): GlobalSearchResult {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    return { fragrances: [], notes: [] };
+  }
+
+  return {
+    fragrances: searchFragranceFullText(fragrances, trimmed),
+    notes: searchNotesFullText(notes, trimmed),
+  };
 }
 
 /** 笔记排序方式 */
