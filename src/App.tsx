@@ -6,6 +6,7 @@ import { FavoritesPage } from './pages/FavoritesPage';
 import { FragranceDetailPage } from './pages/FragranceDetailPage';
 import { StatisticsPage } from './pages/StatisticsPage';
 import { ComparisonPage } from './pages/ComparisonPage';
+import { RecentHistoryPage } from './pages/RecentHistoryPage';
 
 export function App() {
   return (
@@ -14,6 +15,7 @@ export function App() {
         <Route index element={<Navigate to="/library" replace />} />
         <Route path="library" element={<LibraryPage />} />
         <Route path="library/:id" element={<FragranceDetailPage />} />
+        <Route path="recent-history" element={<RecentHistoryPage />} />
         <Route path="favorites" element={<FavoritesPage />} />
         <Route path="comparison" element={<ComparisonPage />} />
         <Route path="notes" element={<NotesPage />} />

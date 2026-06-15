@@ -11,8 +11,10 @@ import {
   Title,
 } from '@mantine/core';
 import { IconArrowLeft, IconHeart } from '@tabler/icons-react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
+import { useRecentHistoryStore } from '../store/recentHistoryStore';
 import fragrancesData from '../mock/fragrances.json';
 import type { Fragrance } from '../types';
 
@@ -25,8 +27,15 @@ export function FragranceDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const { addToHistory } = useRecentHistoryStore();
 
   const fragrance = fragrances.find((f) => f.id === id);
+
+  useEffect(() => {
+    if (fragrance) {
+      addToHistory(fragrance);
+    }
+  }, [fragrance, addToHistory]);
 
   if (!fragrance) {
     return (

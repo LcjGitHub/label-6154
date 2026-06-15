@@ -15,6 +15,7 @@ import { useDisclosure } from '@mantine/hooks';
 import {
   IconBook,
   IconChartBar,
+  IconClock,
   IconColumns,
   IconDownload,
   IconHeart,
@@ -26,6 +27,7 @@ import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router-dom'
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useComparisonStore } from '../store/comparisonStore';
 import { useNotesStore } from '../store/notesStore';
+import { useRecentHistoryStore } from '../store/recentHistoryStore';
 import { exportNotesToFile, parseBackupFile, type ParseResult } from '../utils/backup';
 
 /**
@@ -37,6 +39,7 @@ export function Layout() {
   const { favorites } = useFavoritesStore();
   const { comparisonList } = useComparisonStore();
   const { notes, importNotes } = useNotesStore();
+  const { history } = useRecentHistoryStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [importResult, setImportResult] = useState<{
@@ -104,6 +107,7 @@ export function Layout() {
   const navItems = [
     { to: '/library', label: '示例库', icon: IconBook },
     { to: '/comparison', label: '香调对比', icon: IconColumns, badge: comparisonList.length },
+    { to: '/recent-history', label: '最近浏览', icon: IconClock, badge: history.length },
     { to: '/favorites', label: '我的收藏', icon: IconHeart, badge: favorites.length },
     { to: '/notes', label: '我的笔记', icon: IconNotes },
     { to: '/statistics', label: '数据统计', icon: IconChartBar },
