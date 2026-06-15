@@ -76,10 +76,16 @@ export function sortNotes<T extends Note>(
       sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       break;
     case 'ratingDesc':
-      sorted.sort((a, b) => b.rating - a.rating);
+      sorted.sort((a, b) => {
+        if (b.rating !== a.rating) return b.rating - a.rating;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
       break;
     case 'ratingAsc':
-      sorted.sort((a, b) => a.rating - b.rating);
+      sorted.sort((a, b) => {
+        if (a.rating !== b.rating) return a.rating - b.rating;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
       break;
   }
   return sorted;

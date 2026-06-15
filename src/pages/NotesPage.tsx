@@ -41,8 +41,12 @@ export function NotesPage() {
     { value: '5', label: '5星' },
   ];
 
-  const filtered = useMemo(() => {
+  const { filtered, emptyReason } = useMemo(() => {
     const byName = searchNotesByName(notes, query);
+    if (query.trim() && byName.length === 0) {
+      return { filtered: [], emptyReason: 'name' as const };
+    }
+
     const byTags =
       selectedTags.length === 0
         ? byName
@@ -50,9 +54,17 @@ export function NotesPage() {
             const noteTags = note.tags ?? [];
             return selectedTags.some((tag) => noteTags.includes(tag));
           });
+    if (selectedTags.length > 0 && byTags.length === 0) {
+      return { filtered: [], emptyReason: 'tags' as const };
+    }
+
     const rating = minRating ? parseInt(minRating, 10) : 0;
     const byRating = filterNotesByMinRating(byTags, rating);
-    return sortNotes(byRating, sortKey);
+    if (rating > 0 && byRating.length === 0) {
+      return { filtered: [], emptyReason: 'rating' as const };
+    }
+
+    return { filtered: sortNotes(byRating, sortKey), emptyReason: null };
   }, [notes, query, selectedTags, sortKey, minRating]);
 
   const toggleTag = (tag: NoteTag) => {
@@ -120,27 +132,26 @@ export function NotesPage() {
       </Group>
 
       <Stack mb="lg" gap="sm">
-        <Group gap="sm" align="flex-end">
+        <Group gap="sm" align="center">
           <TextInput
             placeholder="按名称搜索笔记..."
             leftSection={<IconSearch size={16} />}
             value={query}
             onChange={(e) => setQuery(e.currentTarget.value)}
-            style={{ maxWidth: 280 }}
+            style={{ width: 280 }}
           />
           <Select
-            label="排序方式"
+            placeholder="排序方式"
             data={NOTE_SORT_OPTIONS}
             value={sortKey}
             onChange={(value) => value && setSortKey(value as NoteSortKey)}
             style={{ width: 160 }}
           />
           <Select
-            label="最低评分"
+            placeholder="最低评分"
             data={ratingOptions}
             value={minRating}
             onChange={setMinRating}
-            placeholder="全部评分"
             clearable
             style={{ width: 140 }}
           />
@@ -188,11 +199,13 @@ export function NotesPage() {
         <Text c="dimmed" ta="center" mt="xl" size="lg">
           {notes.length === 0
             ? '还没有笔记，点击「新建笔记」开始记录'
-            : minRating && parseInt(minRating, 10) > 0
-              ? '未找到达到最低评分的笔记'
-              : selectedTags.length > 0
+            : emptyReason === 'name'
+              ? '未找到匹配名称的笔记'
+              : emptyReason === 'tags'
                 ? '未找到匹配标签的笔记'
-                : '未找到匹配名称的笔记'}
+                : emptyReason === 'rating'
+                  ? '未找到达到最低评分的笔记'
+                  : '未找到符合条件的笔记'}
         </Text>
       ) : (
         <Grid>
