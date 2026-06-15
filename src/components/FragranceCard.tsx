@@ -1,5 +1,7 @@
-import { Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Stack, Text } from '@mantine/core';
+import { IconHeart } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
+import { useFavoritesStore } from '../store/favoritesStore';
 import type { Fragrance } from '../types';
 
 interface FragranceCardProps {
@@ -10,8 +12,16 @@ interface FragranceCardProps {
  * Mock 香调示例卡片：点击跳转到香调详情页
  */
 export function FragranceCard({ fragrance }: FragranceCardProps) {
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const favorited = isFavorite(fragrance.id);
   const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
   const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(fragrance);
+  };
 
   return (
     <Link
@@ -31,9 +41,19 @@ export function FragranceCard({ fragrance }: FragranceCardProps) {
           <Text fw={600} size="lg">
             {fragrance.name}
           </Text>
-          <Badge color={categoryColor} variant="light">
-            {categoryLabel}
-          </Badge>
+          <Group gap="xs">
+            <Badge color={categoryColor} variant="light">
+              {categoryLabel}
+            </Badge>
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              onClick={handleFavoriteClick}
+              title={favorited ? '取消收藏' : '添加收藏'}
+            >
+              <IconHeart size={18} fill={favorited ? 'red' : 'none'} />
+            </ActionIcon>
+          </Group>
         </Group>
 
         <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
