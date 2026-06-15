@@ -2,6 +2,7 @@ import { Badge, Button, Grid, Group, Modal, Select, Stack, Text, TextInput, Titl
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { NoteCard } from '../components/NoteCard';
+import { NoteDetailDrawer } from '../components/NoteDetailDrawer';
 import { NoteFormModal } from '../components/NoteFormModal';
 import { useNotesStore } from '../store/notesStore';
 import { NOTE_TAGS, NOTE_TAG_COLORS, type Note, type NoteFormValues, type NoteTag } from '../types';
@@ -24,13 +25,17 @@ export function NotesPage() {
   const [minRating, setMinRating] = useState<string | null>(null);
   const [formOpened, setFormOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
+  const [detailOpened, setDetailOpened] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [viewingNote, setViewingNote] = useState<Note | null>(null);
 
   const openForm = () => setFormOpened(true);
   const closeForm = () => setFormOpened(false);
   const openDelete = () => setDeleteOpened(true);
   const closeDelete = () => setDeleteOpened(false);
+  const openDetail = () => setDetailOpened(true);
+  const closeDetail = () => setDetailOpened(false);
 
   const ratingOptions = [
     { value: '0', label: '全部评分' },
@@ -112,6 +117,11 @@ export function NotesPage() {
   const handleOpenDelete = (id: string) => {
     setDeletingId(id);
     openDelete();
+  };
+
+  const handleOpenDetail = (note: Note) => {
+    setViewingNote(note);
+    openDetail();
   };
 
   const handleConfirmDelete = () => {
@@ -215,6 +225,7 @@ export function NotesPage() {
                 note={note}
                 onEdit={handleOpenEdit}
                 onDelete={handleOpenDelete}
+                onViewDetail={handleOpenDetail}
               />
             </Grid.Col>
           ))}
@@ -240,6 +251,14 @@ export function NotesPage() {
           </Button>
         </Group>
       </Modal>
+
+      <NoteDetailDrawer
+        opened={detailOpened}
+        onClose={closeDetail}
+        note={viewingNote}
+        onEdit={handleOpenEdit}
+        onDelete={handleOpenDelete}
+      />
     </>
   );
 }

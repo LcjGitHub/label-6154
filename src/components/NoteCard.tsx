@@ -6,21 +6,31 @@ interface NoteCardProps {
   note: Note;
   onEdit: (note: Note) => void;
   onDelete: (id: string) => void;
+  onViewDetail: (note: Note) => void;
 }
 
 /**
  * 个人笔记卡片
  */
-export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
+export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps) {
   const tags = note.tags ?? [];
 
+  const handleContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onViewDetail(note);
+  };
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" withBorder onClick={handleContentClick} style={{ cursor: 'pointer' }}>
       <Group justify="space-between" mb="xs">
         <Text fw={600} size="lg">
           {note.name}
         </Text>
-        <Group gap="xs">
+        <Group gap="xs" onClick={handleActionClick}>
           <Tooltip label="编辑">
             <ActionIcon variant="light" color="blue" onClick={() => onEdit(note)}>
               <IconEdit size={16} />
