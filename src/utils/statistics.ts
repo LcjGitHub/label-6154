@@ -1,5 +1,6 @@
 import type { Note, Fragrance } from '../types';
 
+/** 评分档位分布（1~5 星） */
 export interface RatingDistribution {
   1: number;
   2: number;
@@ -8,23 +9,23 @@ export interface RatingDistribution {
   5: number;
 }
 
+/** 个人笔记统计结果 */
 export interface NotesStatistics {
   totalNotes: number;
   averageRating: number;
   ratingDistribution: RatingDistribution;
 }
 
+/** 示例库统计结果 */
 export interface LibraryStatistics {
   totalFragrances: number;
   perfumeCount: number;
   incenseCount: number;
 }
 
-export interface StatisticsData {
-  notes: NotesStatistics;
-  library: LibraryStatistics;
-}
-
+/**
+ * 计算个人笔记统计数据：总数、平均评分、各档位分布
+ */
 export function calculateNotesStatistics(notes: Note[]): NotesStatistics {
   const totalNotes = notes.length;
 
@@ -47,6 +48,9 @@ export function calculateNotesStatistics(notes: Note[]): NotesStatistics {
   };
 }
 
+/**
+ * 计算示例库统计数据：总数、香水数量、线香数量
+ */
 export function calculateLibraryStatistics(fragrances: Fragrance[]): LibraryStatistics {
   const totalFragrances = fragrances.length;
   const perfumeCount = fragrances.filter((f) => f.category === 'perfume').length;
@@ -59,13 +63,9 @@ export function calculateLibraryStatistics(fragrances: Fragrance[]): LibraryStat
   };
 }
 
-export function calculateStatistics(notes: Note[], fragrances: Fragrance[]): StatisticsData {
-  return {
-    notes: calculateNotesStatistics(notes),
-    library: calculateLibraryStatistics(fragrances),
-  };
-}
-
+/**
+ * 计算某一评分档位的占比
+ */
 export function getRatingPercentage(distribution: RatingDistribution, rating: number): number {
   const total = distribution[1] + distribution[2] + distribution[3] + distribution[4] + distribution[5];
   if (total === 0) return 0;

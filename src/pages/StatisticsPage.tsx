@@ -20,6 +20,7 @@ interface StatCardProps {
   color?: string;
 }
 
+/** 通用统计卡片 */
 function StatCard({ icon, title, value, subtitle, color = 'blue' }: StatCardProps) {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -62,6 +63,7 @@ interface RatingBarProps {
   percentage: number;
 }
 
+/** 评分档位进度条 */
 function RatingBar({ rating, count, percentage }: RatingBarProps) {
   const colors = ['red', 'orange', 'yellow', 'lime', 'green'];
   return (
@@ -90,6 +92,7 @@ interface CategoryBarProps {
   color: string;
 }
 
+/** 示例库分类进度条 */
 function CategoryBar({ label, count, total, color }: CategoryBarProps) {
   const percentage = total > 0 ? (count / total) * 100 : 0;
   return (
@@ -111,11 +114,16 @@ function CategoryBar({ label, count, total, color }: CategoryBarProps) {
   );
 }
 
+/**
+ * 数据统计页面：展示笔记统计与示例库统计概览
+ */
 export function StatisticsPage() {
   const { notes } = useNotesStore();
 
   const notesStats = useMemo(() => calculateNotesStatistics(notes), [notes]);
   const libraryStats = useMemo(() => calculateLibraryStatistics(fragrances), []);
+
+  const notesEmpty = notes.length === 0;
 
   return (
     <Stack gap="xl">
@@ -132,56 +140,55 @@ export function StatisticsPage() {
         个人笔记统计
       </Title>
 
-      <Grid>
-        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
-          <StatCard
-            icon={<IconNotes size={24} />}
-            title="笔记总数"
-            value={notesStats.totalNotes}
-            subtitle="已记录的香调笔记"
-            color="blue"
-          />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
-          <StatCard
-            icon={<IconStar size={24} />}
-            title="平均评分"
-            value={notes.length > 0 ? notesStats.averageRating.toFixed(1) : '0.0'}
-            subtitle="满分 5.0"
-            color="yellow"
-          />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
-          <StatCard
-            icon={<IconStar size={24} />}
-            title="已评分笔记"
-            value={Object.values(notesStats.ratingDistribution).reduce((a, b) => a + b, 0)}
-            subtitle="共 5 个评分档位"
-            color="green"
-          />
-        </Grid.Col>
-      </Grid>
+      {notesEmpty ? (
+        <Text c="dimmed" ta="center" py="xl" size="lg">
+          还没有笔记，前往「我的笔记」页面开始记录，即可查看统计数据
+        </Text>
+      ) : (
+        <>
+          <Grid>
+            <Grid.Col span={{ base: 12, sm: 6 }}>
+              <StatCard
+                icon={<IconNotes size={24} />}
+                title="笔记总数"
+                value={notesStats.totalNotes}
+                subtitle="已记录的香调笔记"
+                color="blue"
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 6 }}>
+              <StatCard
+                icon={<IconStar size={24} />}
+                title="平均评分"
+                value={notesStats.averageRating.toFixed(1)}
+                subtitle="满分 5.0"
+                color="yellow"
+              />
+            </Grid.Col>
+          </Grid>
 
-      <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Group mb="md" justify="space-between">
-          <Text size="lg" fw={600}>
-            评分档位分布
-          </Text>
-          <Text size="sm" c="dimmed">
-            共 {notesStats.totalNotes} 条笔记
-          </Text>
-        </Group>
-        <Stack gap="md">
-          {[5, 4, 3, 2, 1].map((rating) => (
-            <RatingBar
-              key={rating}
-              rating={rating}
-              count={notesStats.ratingDistribution[rating as keyof typeof notesStats.ratingDistribution]}
-              percentage={getRatingPercentage(notesStats.ratingDistribution, rating)}
-            />
-          ))}
-        </Stack>
-      </Card>
+          <Card shadow="sm" padding="lg" radius="md" withBorder>
+            <Group mb="md" justify="space-between">
+              <Text size="lg" fw={600}>
+                评分档位分布
+              </Text>
+              <Text size="sm" c="dimmed">
+                共 {notesStats.totalNotes} 条笔记
+              </Text>
+            </Group>
+            <Stack gap="md">
+              {[5, 4, 3, 2, 1].map((rating) => (
+                <RatingBar
+                  key={rating}
+                  rating={rating}
+                  count={notesStats.ratingDistribution[rating as keyof typeof notesStats.ratingDistribution]}
+                  percentage={getRatingPercentage(notesStats.ratingDistribution, rating)}
+                />
+              ))}
+            </Stack>
+          </Card>
+        </>
+      )}
 
       <Title order={3} size="h4" mt="md">
         示例库统计
@@ -202,7 +209,7 @@ export function StatisticsPage() {
             icon={<IconFlask2 size={24} />}
             title="香水数量"
             value={libraryStats.perfumeCount}
-            subtitle="perfume 分类"
+            subtitle="香水分类"
             color="pink"
           />
         </Grid.Col>
@@ -211,7 +218,7 @@ export function StatisticsPage() {
             icon={<IconFlask2 size={24} />}
             title="线香数量"
             value={libraryStats.incenseCount}
-            subtitle="incense 分类"
+            subtitle="线香分类"
             color="indigo"
           />
         </Grid.Col>
