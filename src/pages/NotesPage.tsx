@@ -1,11 +1,17 @@
-import { Badge, Button, Grid, Group, Modal, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Badge, Button, Grid, Group, Modal, Select, Stack, Text, TextInput, Title } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useMemo, useState } from 'react';
 import { NoteCard } from '../components/NoteCard';
 import { NoteFormModal } from '../components/NoteFormModal';
 import { useNotesStore } from '../store/notesStore';
 import { NOTE_TAGS, NOTE_TAG_COLORS, type Note, type NoteFormValues, type NoteTag } from '../types';
-import { searchNotesByName } from '../utils/search';
+import {
+  searchNotesByName,
+  sortNotes,
+  filterNotesByMinRating,
+  NOTE_SORT_OPTIONS,
+  type NoteSortKey,
+} from '../utils/search';
 
 /**
  * 我的笔记页面：新建、编辑、删除笔记
@@ -14,6 +20,8 @@ export function NotesPage() {
   const { notes, addNote, updateNote, deleteNote } = useNotesStore();
   const [query, setQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<NoteTag[]>([]);
+  const [sortKey, setSortKey] = useState<NoteSortKey>('updatedAt');
+  const [minRating, setMinRating] = useState<string | null>(null);
   const [formOpened, setFormOpened] = useState(false);
   const [deleteOpened, setDeleteOpened] = useState(false);
   const [editingNote, setEditingNote] = useState<Note | null>(null);
@@ -24,16 +32,28 @@ export function NotesPage() {
   const openDelete = () => setDeleteOpened(true);
   const closeDelete = () => setDeleteOpened(false);
 
+  const ratingOptions = [
+    { value: '0', label: '全部评分' },
+    { value: '1', label: '1星及以上' },
+    { value: '2', label: '2星及以上' },
+    { value: '3', label: '3星及以上' },
+    { value: '4', label: '4星及以上' },
+    { value: '5', label: '5星' },
+  ];
+
   const filtered = useMemo(() => {
     const byName = searchNotesByName(notes, query);
-    if (selectedTags.length === 0) {
-      return byName;
-    }
-    return byName.filter((note) => {
-      const noteTags = note.tags ?? [];
-      return selectedTags.some((tag) => noteTags.includes(tag));
-    });
-  }, [notes, query, selectedTags]);
+    const byTags =
+      selectedTags.length === 0
+        ? byName
+        : byName.filter((note) => {
+            const noteTags = note.tags ?? [];
+            return selectedTags.some((tag) => noteTags.includes(tag));
+          });
+    const rating = minRating ? parseInt(minRating, 10) : 0;
+    const byRating = filterNotesByMinRating(byTags, rating);
+    return sortNotes(byRating, sortKey);
+  }, [notes, query, selectedTags, sortKey, minRating]);
 
   const toggleTag = (tag: NoteTag) => {
     setSelectedTags((prev) =>
@@ -100,13 +120,31 @@ export function NotesPage() {
       </Group>
 
       <Stack mb="lg" gap="sm">
-        <TextInput
-          placeholder="按名称搜索笔记..."
-          leftSection={<IconSearch size={16} />}
-          value={query}
-          onChange={(e) => setQuery(e.currentTarget.value)}
-          style={{ maxWidth: 400 }}
-        />
+        <Group gap="sm" align="flex-end">
+          <TextInput
+            placeholder="按名称搜索笔记..."
+            leftSection={<IconSearch size={16} />}
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+            style={{ maxWidth: 280 }}
+          />
+          <Select
+            label="排序方式"
+            data={NOTE_SORT_OPTIONS}
+            value={sortKey}
+            onChange={(value) => value && setSortKey(value as NoteSortKey)}
+            style={{ width: 160 }}
+          />
+          <Select
+            label="最低评分"
+            data={ratingOptions}
+            value={minRating}
+            onChange={setMinRating}
+            placeholder="全部评分"
+            clearable
+            style={{ width: 140 }}
+          />
+        </Group>
         <Group gap="xs">
           <Text size="sm" fw={500} mr={4}>
             标签筛选：
@@ -150,9 +188,11 @@ export function NotesPage() {
         <Text c="dimmed" ta="center" mt="xl" size="lg">
           {notes.length === 0
             ? '还没有笔记，点击「新建笔记」开始记录'
-            : selectedTags.length > 0
-              ? '未找到匹配标签的笔记'
-              : '未找到匹配名称的笔记'}
+            : minRating && parseInt(minRating, 10) > 0
+              ? '未找到达到最低评分的笔记'
+              : selectedTags.length > 0
+                ? '未找到匹配标签的笔记'
+                : '未找到匹配名称的笔记'}
         </Text>
       ) : (
         <Grid>
