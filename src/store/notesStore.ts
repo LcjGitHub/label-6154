@@ -2,12 +2,16 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Note, NoteFormValues } from '../types';
 
+export interface ImportResult {
+  importedCount: number;
+}
+
 interface NotesState {
   notes: Note[];
   addNote: (values: NoteFormValues) => void;
   updateNote: (id: string, values: NoteFormValues) => void;
   deleteNote: (id: string) => void;
-  importNotes: (notesToImport: Note[]) => number;
+  importNotes: (notesToImport: Note[]) => ImportResult;
 }
 
 /**
@@ -52,6 +56,13 @@ export const useNotesStore = create<NotesState>()(
         }));
       },
 
+      /**
+       * 批量导入笔记并合并到现有笔记
+       * 数据备份功能：将从纯文本备份文件解析得到的笔记批量导入
+       * 自动处理 ID 冲突，为重复 ID 生成新的唯一 ID
+       * @param notesToImport - 待导入的笔记列表
+       * @returns 导入结果，包含成功导入的笔记条数
+       */
       importNotes: (notesToImport) => {
         let importedCount = 0;
         set((state) => {
@@ -75,7 +86,7 @@ export const useNotesStore = create<NotesState>()(
             notes: [...newNotes, ...state.notes],
           };
         });
-        return importedCount;
+        return { importedCount };
       },
     }),
     {

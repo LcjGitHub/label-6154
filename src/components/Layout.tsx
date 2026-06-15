@@ -6,7 +6,7 @@ import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router-dom'
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useComparisonStore } from '../store/comparisonStore';
 import { useNotesStore } from '../store/notesStore';
-import { exportNotesToFile, parseBackupFile } from '../utils/backup';
+import { exportNotesToFile, parseBackupFile, type ParseResult } from '../utils/backup';
 
 /**
  * 应用布局：顶部导航 + 侧边栏
@@ -19,8 +19,13 @@ export function Layout() {
   const { notes, importNotes } = useNotesStore();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [importResult, setImportResult] = useState<{ count: number; show: boolean }>({
-    count: 0,
+  const [importResult, setImportResult] = useState<{
+    importedCount: number;
+    skippedCount: number;
+    show: boolean;
+  }>({
+    importedCount: 0,
+    skippedCount: 0,
     show: false,
   });
   const [errorModal, setErrorModal] = useState<{ message: string; show: boolean }>({
@@ -28,25 +33,41 @@ export function Layout() {
     show: false,
   });
 
+  /**
+   * 数据备份功能：导出全部笔记为纯文本文件
+   * 将当前所有笔记以中文可读形式写入 .txt 文件并触发下载
+   */
   const handleExport = () => {
     exportNotesToFile(notes);
   };
 
+  /**
+   * 数据备份功能：打开文件选择对话框，选择纯文本备份文件
+   */
   const handleImportClick = () => {
     fileInputRef.current?.click();
   };
 
+  /**
+   * 数据备份功能：处理选择的备份文件
+   * 解析纯文本备份文件，将有效笔记合并到现有笔记中
+   * 显示导入成功条数和跳过条数，解析失败时提示中文错误信息
+   */
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
-      const parsedNotes = await parseBackupFile(file);
-      if (parsedNotes.length === 0) {
-        setErrorModal({ message: '未找到有效的笔记数据', show: true });
+      const result: ParseResult = await parseBackupFile(file);
+      if (result.notes.length === 0 && result.skippedCount === 0) {
+        setErrorModal({ message: '未找到有效的笔记数据，请检查文件格式', show: true });
       } else {
-        const count = importNotes(parsedNotes);
-        setImportResult({ count, show: true });
+        const importResult = importNotes(result.notes);
+        setImportResult({
+          importedCount: importResult.importedCount,
+          skippedCount: result.skippedCount,
+          show: true,
+        });
       }
     } catch (err) {
       setErrorModal({
@@ -146,7 +167,7 @@ export function Layout() {
 
       <input
         type="file"
-        accept=".json,application/json"
+        accept=".txt,text/plain"
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={handleFileChange}
@@ -158,7 +179,14 @@ export function Layout() {
         title="导入成功"
         size="sm"
       >
-        <Text>成功导入 {importResult.count} 条笔记</Text>
+        <Stack gap="xs">
+          <Text>成功导入 {importResult.importedCount} 条笔记</Text>
+          {importResult.skippedCount > 0 && (
+            <Text size="sm" c="dimmed">
+              跳过 {importResult.skippedCount} 条格式错误的笔记
+            </Text>
+          )}
+        </Stack>
         <Group justify="flex-end" mt="md">
           <Button onClick={() => setImportResult((prev) => ({ ...prev, show: false }))}>
             确定
