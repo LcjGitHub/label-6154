@@ -11,7 +11,7 @@ import type { Fragrance, NoteFormValues } from '../types';
 const fragrances = fragrancesData as Fragrance[];
 
 /**
- * 示例库页面：浏览 Mock 香调，支持按名称搜索
+ * 示例库页面：浏览 Mock 香调，支持全文模糊搜索（名称、前调、中调、后调、描述）
  */
 export function LibraryPage() {
   const [query, setQuery] = useState('');
@@ -54,7 +54,7 @@ export function LibraryPage() {
 
       <Group mb="lg" align="flex-end">
         <TextInput
-          placeholder="搜索名称、香调或描述..."
+          placeholder="搜索名称、前中后调或描述..."
           leftSection={<IconSearch size={16} />}
           value={query}
           onChange={(e) => setQuery(e.currentTarget.value)}
