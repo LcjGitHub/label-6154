@@ -1,6 +1,7 @@
-import { Badge, Box, Button, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { ActionIcon, Badge, Box, Button, Divider, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { IconArrowLeft, IconHeart } from '@tabler/icons-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useFavoritesStore } from '../store/favoritesStore';
 import fragrancesData from '../mock/fragrances.json';
 import type { Fragrance } from '../types';
 
@@ -12,6 +13,7 @@ const fragrances = fragrancesData as Fragrance[];
 export function FragranceDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
 
   const fragrance = fragrances.find((f) => f.id === id);
 
@@ -47,9 +49,19 @@ export function FragranceDetailPage() {
       <Paper shadow="sm" radius="md" p="xl" withBorder>
         <Group justify="space-between" mb="sm">
           <Title order={3}>{fragrance.name}</Title>
-          <Badge color={categoryColor} variant="light" size="lg">
-            {categoryLabel}
-          </Badge>
+          <Group gap="xs">
+            <Badge color={categoryColor} variant="light" size="lg">
+              {categoryLabel}
+            </Badge>
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              onClick={() => toggleFavorite(fragrance)}
+              title={isFavorite(fragrance.id) ? '取消收藏' : '添加收藏'}
+            >
+              <IconHeart size={20} fill={isFavorite(fragrance.id) ? 'red' : 'none'} />
+            </ActionIcon>
+          </Group>
         </Group>
 
         <Text c="dimmed" size="md" mb="lg">

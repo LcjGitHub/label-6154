@@ -1,12 +1,14 @@
 import { ActionIcon, Badge, Card, Group, Stack, Text, Title } from '@mantine/core';
-import { IconHeart, IconTrash } from '@tabler/icons-react';
+import { IconHeart } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
 
 /**
  * 收藏夹页面：展示已收藏的香调列表
  */
 export function FavoritesPage() {
-  const { favorites, removeFavorite } = useFavoritesStore();
+  const navigate = useNavigate();
+  const { favorites, toggleFavorite } = useFavoritesStore();
 
   return (
     <>
@@ -41,7 +43,16 @@ export function FavoritesPage() {
             const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
 
             return (
-              <Card key={fragrance.id} withBorder padding="lg" radius="md">
+              <Card
+                key={fragrance.id}
+                withBorder
+                padding="lg"
+                radius="md"
+                style={{ cursor: 'pointer', transition: 'box-shadow 0.2s ease' }}
+                onClick={() => navigate(`/library/${fragrance.id}`)}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '')}
+              >
                 <Group justify="space-between" align="flex-start" mb="xs">
                   <Group>
                     <Text fw={600} size="lg">
@@ -54,10 +65,13 @@ export function FavoritesPage() {
                   <ActionIcon
                     variant="subtle"
                     color="red"
-                    onClick={() => removeFavorite(fragrance.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(fragrance);
+                    }}
                     title="取消收藏"
                   >
-                    <IconTrash size={18} />
+                    <IconHeart size={18} fill="red" />
                   </ActionIcon>
                 </Group>
 
