@@ -1,6 +1,6 @@
-import { ActionIcon, Card, Group, Rating, Stack, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, Badge, Card, Group, Rating, Stack, Text, Tooltip } from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import type { Note } from '../types';
+import { NOTE_TAG_COLORS, type Note } from '../types';
 
 interface NoteCardProps {
   note: Note;
@@ -12,6 +12,8 @@ interface NoteCardProps {
  * 个人笔记卡片
  */
 export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
+  const tags = note.tags ?? [];
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Group justify="space-between" mb="xs">
@@ -31,6 +33,16 @@ export function NoteCard({ note, onEdit, onDelete }: NoteCardProps) {
           </Tooltip>
         </Group>
       </Group>
+
+      {tags.length > 0 && (
+        <Group gap="xs" mb="sm">
+          {tags.map((tag) => (
+            <Badge key={tag} color={NOTE_TAG_COLORS[tag]} variant="light">
+              {tag}
+            </Badge>
+          ))}
+        </Group>
+      )}
 
       <Rating value={note.rating} readOnly mb="sm" />
 

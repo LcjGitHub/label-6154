@@ -1,8 +1,8 @@
-import { Button, Group, Modal, Rating, Stack, Text, Textarea, TextInput } from '@mantine/core';
+import { Button, Checkbox, Group, Modal, Rating, Stack, Text, Textarea, TextInput } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useEffect } from 'react';
 import { noteFormSchema } from '../schemas/noteForm';
-import type { Note, NoteFormValues } from '../types';
+import { NOTE_TAGS, NOTE_TAG_COLORS, type Note, type NoteFormValues, type NoteTag } from '../types';
 
 interface NoteFormModalProps {
   opened: boolean;
@@ -19,6 +19,7 @@ const emptyValues: NoteFormValues = {
   baseNotes: '',
   rating: 3,
   remark: '',
+  tags: [],
 };
 
 /**
@@ -46,6 +47,7 @@ export function NoteFormModal({
           baseNotes: initialValues.baseNotes,
           rating: initialValues.rating,
           remark: initialValues.remark,
+          tags: initialValues.tags ?? [],
         });
       } else {
         form.setValues(emptyValues);
@@ -58,6 +60,8 @@ export function NoteFormModal({
     onSubmit(values);
     onClose();
   });
+
+  const currentTags = form.values.tags;
 
   return (
     <Modal opened={opened} onClose={onClose} title={title} size="md">
@@ -100,6 +104,26 @@ export function NoteFormModal({
                 {form.errors.rating}
               </Text>
             )}
+          </Stack>
+          <Stack gap={4}>
+            <Text size="sm" fw={500}>
+              标签
+            </Text>
+            <Checkbox.Group
+              value={currentTags as string[]}
+              onChange={(values) => form.setFieldValue('tags', values as NoteTag[])}
+            >
+              <Group mt="xs">
+                {NOTE_TAGS.map((tag) => (
+                  <Checkbox
+                    key={tag}
+                    value={tag}
+                    label={tag}
+                    color={NOTE_TAG_COLORS[tag]}
+                  />
+                ))}
+              </Group>
+            </Checkbox.Group>
           </Stack>
           <Textarea
             label="备注"
