@@ -7,6 +7,7 @@ interface NotesState {
   addNote: (values: NoteFormValues) => void;
   updateNote: (id: string, values: NoteFormValues) => void;
   deleteNote: (id: string) => void;
+  importNotes: (notesToImport: Note[]) => number;
 }
 
 /**
@@ -49,6 +50,32 @@ export const useNotesStore = create<NotesState>()(
         set((state) => ({
           notes: state.notes.filter((note) => note.id !== id),
         }));
+      },
+
+      importNotes: (notesToImport) => {
+        let importedCount = 0;
+        set((state) => {
+          const existingIds = new Set(state.notes.map((n) => n.id));
+          const newNotes: Note[] = [];
+
+          notesToImport.forEach((note) => {
+            if (existingIds.has(note.id)) {
+              newNotes.push({
+                ...note,
+                id: generateId(),
+              });
+            } else {
+              newNotes.push(note);
+              existingIds.add(note.id);
+            }
+            importedCount++;
+          });
+
+          return {
+            notes: [...newNotes, ...state.notes],
+          };
+        });
+        return importedCount;
       },
     }),
     {
