@@ -33,6 +33,7 @@ export interface Note {
   rating: number;
   remark: string;
   tags: NoteTag[];
+  relatedExampleId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,4 +47,5 @@ export interface NoteFormValues {
   rating: number;
   remark: string;
   tags: NoteTag[];
+  relatedExampleId?: string;
 }

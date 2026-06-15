@@ -1,6 +1,10 @@
-import { Badge, Button, Drawer, Group, Rating, Stack, Text } from '@mantine/core';
+import { Anchor, Badge, Button, Drawer, Group, Rating, Stack, Text } from '@mantine/core';
 import { IconCalendarTime, IconClock, IconEdit, IconTrash } from '@tabler/icons-react';
-import { NOTE_TAG_COLORS, type Note } from '../types';
+import { useNavigate } from 'react-router-dom';
+import { NOTE_TAG_COLORS, type Fragrance, type Note } from '../types';
+import fragrancesData from '../mock/fragrances.json';
+
+const fragrances = fragrancesData as Fragrance[];
 
 interface NoteDetailDrawerProps {
   opened: boolean;
@@ -20,9 +24,14 @@ export function NoteDetailDrawer({
   onEdit,
   onDelete,
 }: NoteDetailDrawerProps) {
+  const navigate = useNavigate();
+
   if (!note) return null;
 
   const tags = note.tags ?? [];
+  const relatedExample = note.relatedExampleId
+    ? fragrances.find((f) => f.id === note.relatedExampleId)
+    : null;
 
   const handleEdit = () => {
     onEdit(note);
@@ -66,6 +75,23 @@ export function NoteDetailDrawer({
                 {tag}
               </Badge>
             ))}
+          </Group>
+        )}
+
+        {relatedExample && (
+          <Group gap="xs">
+            <Text size="sm" c="dimmed">
+              来源示例：
+            </Text>
+            <Anchor
+              size="sm"
+              onClick={() => {
+                navigate(`/library/${relatedExample.id}`);
+                onClose();
+              }}
+            >
+              {relatedExample.name}
+            </Anchor>
           </Group>
         )}
 

@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Button,
   Checkbox,
   Group,
@@ -11,6 +12,7 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { noteFormSchema } from '../schemas/noteForm';
 import {
   NOTE_TAGS,
@@ -20,6 +22,9 @@ import {
   type NoteFormValues,
   type NoteTag,
 } from '../types';
+import fragrancesData from '../mock/fragrances.json';
+
+const fragrances = fragrancesData as Fragrance[];
 
 interface NoteFormModalProps {
   opened: boolean;
@@ -38,6 +43,7 @@ const emptyValues: NoteFormValues = {
   rating: 3,
   remark: '',
   tags: [],
+  relatedExampleId: undefined,
 };
 
 /**
@@ -51,10 +57,15 @@ export function NoteFormModal({
   prefillFragrance,
   title,
 }: NoteFormModalProps) {
+  const navigate = useNavigate();
   const form = useForm<NoteFormValues>({
     initialValues: emptyValues,
     validate: zodResolver(noteFormSchema),
   });
+
+  const relatedExample = form.values.relatedExampleId
+    ? fragrances.find((f) => f.id === form.values.relatedExampleId)
+    : null;
 
   useEffect(() => {
     if (opened) {
@@ -67,6 +78,7 @@ export function NoteFormModal({
           rating: initialValues.rating,
           remark: initialValues.remark,
           tags: initialValues.tags ?? [],
+          relatedExampleId: initialValues.relatedExampleId,
         });
       } else if (prefillFragrance) {
         form.setValues({
@@ -77,6 +89,7 @@ export function NoteFormModal({
           rating: 3,
           remark: '',
           tags: [],
+          relatedExampleId: prefillFragrance.id,
         });
       } else {
         form.setValues(emptyValues);
@@ -96,6 +109,22 @@ export function NoteFormModal({
     <Modal opened={opened} onClose={onClose} title={title} size="md">
       <form onSubmit={handleSubmit}>
         <Stack gap="md">
+          {relatedExample && (
+            <Group gap="xs">
+              <Text size="sm" fw={500} c="dimmed">
+                来源示例：
+              </Text>
+              <Anchor
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(`/library/${relatedExample.id}`);
+                }}
+              >
+                {relatedExample.name}
+              </Anchor>
+            </Group>
+          )}
           <TextInput
             label="名称"
             placeholder="输入香调名称"

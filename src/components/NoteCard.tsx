@@ -1,6 +1,20 @@
-import { ActionIcon, Badge, Card, Group, Rating, Stack, Text, Tooltip } from '@mantine/core';
+import {
+  ActionIcon,
+  Anchor,
+  Badge,
+  Card,
+  Group,
+  Rating,
+  Stack,
+  Text,
+  Tooltip,
+} from '@mantine/core';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
-import { NOTE_TAG_COLORS, type Note } from '../types';
+import { useNavigate } from 'react-router-dom';
+import { NOTE_TAG_COLORS, type Fragrance, type Note } from '../types';
+import fragrancesData from '../mock/fragrances.json';
+
+const fragrances = fragrancesData as Fragrance[];
 
 interface NoteCardProps {
   note: Note;
@@ -13,7 +27,11 @@ interface NoteCardProps {
  * 个人笔记卡片：点击卡片内容区域（编辑、删除按钮除外）可查看详情
  */
 export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps) {
+  const navigate = useNavigate();
   const tags = note.tags ?? [];
+  const relatedExample = note.relatedExampleId
+    ? fragrances.find((f) => f.id === note.relatedExampleId)
+    : null;
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -34,6 +52,13 @@ export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps
 
   const handleActionKeyDown = (e: React.KeyboardEvent) => {
     e.stopPropagation();
+  };
+
+  const handleRelatedExampleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (relatedExample) {
+      navigate(`/library/${relatedExample.id}`);
+    }
   };
 
   return (
@@ -74,6 +99,17 @@ export function NoteCard({ note, onEdit, onDelete, onViewDetail }: NoteCardProps
               {tag}
             </Badge>
           ))}
+        </Group>
+      )}
+
+      {relatedExample && (
+        <Group gap="xs" mb="sm">
+          <Text size="xs" c="dimmed">
+            来源：
+          </Text>
+          <Anchor size="xs" onClick={handleRelatedExampleClick}>
+            {relatedExample.name}
+          </Anchor>
         </Group>
       )}
 
