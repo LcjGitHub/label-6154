@@ -1,7 +1,8 @@
-import { ActionIcon, Badge, Card, Group, Stack, Text, Title } from '@mantine/core';
+import { ActionIcon, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { IconHeart } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
+import { NoteSummary } from '../components/NoteSummary';
 
 /**
  * 收藏夹页面：展示已收藏的香调列表
@@ -39,9 +40,6 @@ export function FavoritesPage() {
       ) : (
         <Stack gap="md">
           {favorites.map((fragrance) => {
-            const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
-            const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
-
             return (
               <Card
                 key={fragrance.id}
@@ -53,58 +51,23 @@ export function FavoritesPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)')}
                 onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '')}
               >
-                <Group justify="space-between" align="flex-start" mb="xs">
-                  <Group>
-                    <Text fw={600} size="lg">
-                      {fragrance.name}
-                    </Text>
-                    <Badge color={categoryColor} variant="light">
-                      {categoryLabel}
-                    </Badge>
-                  </Group>
-                  <ActionIcon
-                    variant="subtle"
-                    color="red"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(fragrance);
-                    }}
-                    title="取消收藏"
-                  >
-                    <IconHeart size={18} fill="red" />
-                  </ActionIcon>
-                </Group>
-
-                <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
-                  {fragrance.description}
-                </Text>
-
-                <Stack gap={4}>
-                  <Group align="flex-start">
-                    <Text size="sm" w={50} fw={500} c="teal">
-                      前调：
-                    </Text>
-                    <Text size="sm" style={{ flex: 1 }}>
-                      {fragrance.topNotes}
-                    </Text>
-                  </Group>
-                  <Group align="flex-start">
-                    <Text size="sm" w={50} fw={500} c="blue">
-                      中调：
-                    </Text>
-                    <Text size="sm" style={{ flex: 1 }}>
-                      {fragrance.middleNotes}
-                    </Text>
-                  </Group>
-                  <Group align="flex-start">
-                    <Text size="sm" w={50} fw={500} c="violet">
-                      后调：
-                    </Text>
-                    <Text size="sm" style={{ flex: 1 }}>
-                      {fragrance.baseNotes}
-                    </Text>
-                  </Group>
-                </Stack>
+                <NoteSummary
+                  fragrance={fragrance}
+                  variant="list"
+                  headerExtra={
+                    <ActionIcon
+                      variant="subtle"
+                      color="red"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(fragrance);
+                      }}
+                      title="取消收藏"
+                    >
+                      <IconHeart size={18} fill="red" />
+                    </ActionIcon>
+                  }
+                />
               </Card>
             );
           })}

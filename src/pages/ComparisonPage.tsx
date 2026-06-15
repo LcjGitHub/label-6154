@@ -1,7 +1,9 @@
-import { ActionIcon, Badge, Button, Container, Group, ScrollArea, Stack, Table, Text, Title } from '@mantine/core';
+import { ActionIcon, Button, Container, Group, ScrollArea, Stack, Table, Text, Title } from '@mantine/core';
 import { IconColumns, IconExternalLink, IconTrash, IconX } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useComparisonStore } from '../store/comparisonStore';
+import { CategoryBadge, NOTE_TIERS } from '../components/NoteSummary';
+import type { Fragrance } from '../types';
 
 /**
  * 香调对比页：以表格形式并列展示所选香调的名称、分类、前中后调与简介
@@ -10,19 +12,11 @@ export function ComparisonPage() {
   const navigate = useNavigate();
   const { comparisonList, removeFromComparison, clearComparison } = useComparisonStore();
 
-  const rows = [
+  const rows: { label: string; key: keyof Fragrance; color: string }[] = [
     { label: '分类', key: 'category', color: '' },
-    { label: '前调', key: 'topNotes', color: 'teal' },
-    { label: '中调', key: 'middleNotes', color: 'blue' },
-    { label: '后调', key: 'baseNotes', color: 'violet' },
+    ...NOTE_TIERS.map((tier) => ({ label: tier.label, key: tier.key, color: tier.color })),
     { label: '简介', key: 'description', color: '' },
-  ] as const;
-
-  const formatCategory = (category: 'perfume' | 'incense') => {
-    return category === 'perfume'
-      ? { label: '香水', color: 'grape' }
-      : { label: '线香', color: 'orange' };
-  };
+  ];
 
   if (comparisonList.length === 0) {
     return (
@@ -134,14 +128,7 @@ export function ComparisonPage() {
                       style={{ verticalAlign: 'top' }}
                     >
                       {row.key === 'category' ? (
-                        (() => {
-                          const cat = formatCategory(fragrance.category);
-                          return (
-                            <Badge color={cat.color} variant="light">
-                              {cat.label}
-                            </Badge>
-                          );
-                        })()
+                        <CategoryBadge category={fragrance.category} />
                       ) : (
                         <Text size="sm" lh={1.6}>
                           {fragrance[row.key]}

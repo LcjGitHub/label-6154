@@ -1,9 +1,10 @@
-import { ActionIcon, Badge, Button, Card, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, Group } from '@mantine/core';
 import { IconColumns, IconHeart, IconNotes } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
 import { useComparisonStore } from '../store/comparisonStore';
 import type { Fragrance } from '../types';
+import { NoteSummary } from './NoteSummary';
 
 interface FragranceCardProps {
   fragrance: Fragrance;
@@ -19,8 +20,6 @@ export function FragranceCard({ fragrance, onQuickNote }: FragranceCardProps) {
   const { addToComparison, removeFromComparison, isInComparison, canAddMore } = useComparisonStore();
   const favorited = isFavorite(fragrance.id);
   const inComparison = isInComparison(fragrance.id);
-  const categoryLabel = fragrance.category === 'perfume' ? '香水' : '线香';
-  const categoryColor = fragrance.category === 'perfume' ? 'grape' : 'orange';
 
   const handleToggleComparison = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,14 +41,10 @@ export function FragranceCard({ fragrance, onQuickNote }: FragranceCardProps) {
       onMouseEnter={(e) => (e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)')}
       onMouseLeave={(e) => (e.currentTarget.style.boxShadow = '')}
     >
-      <Group justify="space-between" mb="xs">
-        <Text fw={600} size="lg">
-          {fragrance.name}
-        </Text>
-        <Group gap="xs">
-          <Badge color={categoryColor} variant="light">
-            {categoryLabel}
-          </Badge>
+      <NoteSummary
+        fragrance={fragrance}
+        variant="card"
+        headerExtra={
           <ActionIcon
             variant="subtle"
             color="red"
@@ -61,33 +56,8 @@ export function FragranceCard({ fragrance, onQuickNote }: FragranceCardProps) {
           >
             <IconHeart size={18} fill={favorited ? 'red' : 'none'} />
           </ActionIcon>
-        </Group>
-      </Group>
-
-      <Text size="sm" c="dimmed" mb="md" lineClamp={2}>
-        {fragrance.description}
-      </Text>
-
-      <Stack gap={4}>
-        <Text size="sm">
-          <Text span fw={500} c="teal">
-            前调：
-          </Text>
-          {fragrance.topNotes}
-        </Text>
-        <Text size="sm">
-          <Text span fw={500} c="blue">
-            中调：
-          </Text>
-          {fragrance.middleNotes}
-        </Text>
-        <Text size="sm">
-          <Text span fw={500} c="violet">
-            后调：
-          </Text>
-          {fragrance.baseNotes}
-        </Text>
-      </Stack>
+        }
+      />
 
       <Group mt="md" justify="space-between">
         {onQuickNote && (
