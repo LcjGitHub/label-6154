@@ -1,6 +1,6 @@
 import { AppShell, Badge, Burger, Group, NavLink, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { IconBook, IconHeart, IconNotes } from '@tabler/icons-react';
+import { IconBook, IconChartBar, IconHeart, IconNotes } from '@tabler/icons-react';
 import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router-dom';
 import { useFavoritesStore } from '../store/favoritesStore';
 
@@ -16,6 +16,7 @@ export function Layout() {
     { to: '/library', label: '示例库', icon: IconBook },
     { to: '/favorites', label: '我的收藏', icon: IconHeart, badge: favorites.length },
     { to: '/notes', label: '我的笔记', icon: IconNotes },
+    { to: '/statistics', label: '数据统计', icon: IconChartBar },
   ];
 
   return (

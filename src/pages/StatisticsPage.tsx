@@ -1,0 +1,246 @@
+import { Card, Grid, Group, Progress, Stack, Text, Title } from '@mantine/core';
+import { IconChartBar, IconNotes, IconStar, IconFlask2 } from '@tabler/icons-react';
+import { useMemo } from 'react';
+import fragrancesData from '../mock/fragrances.json';
+import { useNotesStore } from '../store/notesStore';
+import type { Fragrance } from '../types';
+import {
+  calculateNotesStatistics,
+  calculateLibraryStatistics,
+  getRatingPercentage,
+} from '../utils/statistics';
+
+const fragrances = fragrancesData as Fragrance[];
+
+interface StatCardProps {
+  icon: React.ReactNode;
+  title: string;
+  value: string | number;
+  subtitle?: string;
+  color?: string;
+}
+
+function StatCard({ icon, title, value, subtitle, color = 'blue' }: StatCardProps) {
+  return (
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Group gap="md">
+        <div
+          style={{
+            width: 48,
+            height: 48,
+            borderRadius: 8,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: `var(--mantine-color-${color}-light)`,
+            color: `var(--mantine-color-${color}-filled)`,
+          }}
+        >
+          {icon}
+        </div>
+        <Stack gap={0}>
+          <Text size="sm" c="dimmed">
+            {title}
+          </Text>
+          <Text size="xl" fw={700}>
+            {value}
+          </Text>
+          {subtitle && (
+            <Text size="xs" c="dimmed">
+              {subtitle}
+            </Text>
+          )}
+        </Stack>
+      </Group>
+    </Card>
+  );
+}
+
+interface RatingBarProps {
+  rating: number;
+  count: number;
+  percentage: number;
+}
+
+function RatingBar({ rating, count, percentage }: RatingBarProps) {
+  const colors = ['red', 'orange', 'yellow', 'lime', 'green'];
+  return (
+    <Group gap="sm" align="center">
+      <Text w={30} size="sm" fw={500} ta="right">
+        {rating}星
+      </Text>
+      <Progress
+        value={percentage}
+        color={colors[rating - 1]}
+        size="lg"
+        style={{ flex: 1 }}
+        radius="sm"
+      />
+      <Text w={60} size="sm" c="dimmed" ta="right">
+        {count} 条 ({percentage.toFixed(1)}%)
+      </Text>
+    </Group>
+  );
+}
+
+interface CategoryBarProps {
+  label: string;
+  count: number;
+  total: number;
+  color: string;
+}
+
+function CategoryBar({ label, count, total, color }: CategoryBarProps) {
+  const percentage = total > 0 ? (count / total) * 100 : 0;
+  return (
+    <Group gap="sm" align="center">
+      <Text w={60} size="sm" fw={500} ta="right">
+        {label}
+      </Text>
+      <Progress
+        value={percentage}
+        color={color}
+        size="lg"
+        style={{ flex: 1 }}
+        radius="sm"
+      />
+      <Text w={80} size="sm" c="dimmed" ta="right">
+        {count} 款 ({percentage.toFixed(1)}%)
+      </Text>
+    </Group>
+  );
+}
+
+export function StatisticsPage() {
+  const { notes } = useNotesStore();
+
+  const notesStats = useMemo(() => calculateNotesStatistics(notes), [notes]);
+  const libraryStats = useMemo(() => calculateLibraryStatistics(fragrances), []);
+
+  return (
+    <Stack gap="xl">
+      <Group justify="space-between" align="center">
+        <Title order={2}>
+          <Group gap="sm" align="center">
+            <IconChartBar size={28} />
+            数据统计
+          </Group>
+        </Title>
+      </Group>
+
+      <Title order={3} size="h4" mt="md">
+        个人笔记统计
+      </Title>
+
+      <Grid>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconNotes size={24} />}
+            title="笔记总数"
+            value={notesStats.totalNotes}
+            subtitle="已记录的香调笔记"
+            color="blue"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconStar size={24} />}
+            title="平均评分"
+            value={notes.length > 0 ? notesStats.averageRating.toFixed(1) : '0.0'}
+            subtitle="满分 5.0"
+            color="yellow"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconStar size={24} />}
+            title="已评分笔记"
+            value={Object.values(notesStats.ratingDistribution).reduce((a, b) => a + b, 0)}
+            subtitle="共 5 个评分档位"
+            color="green"
+          />
+        </Grid.Col>
+      </Grid>
+
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Group mb="md" justify="space-between">
+          <Text size="lg" fw={600}>
+            评分档位分布
+          </Text>
+          <Text size="sm" c="dimmed">
+            共 {notesStats.totalNotes} 条笔记
+          </Text>
+        </Group>
+        <Stack gap="md">
+          {[5, 4, 3, 2, 1].map((rating) => (
+            <RatingBar
+              key={rating}
+              rating={rating}
+              count={notesStats.ratingDistribution[rating as keyof typeof notesStats.ratingDistribution]}
+              percentage={getRatingPercentage(notesStats.ratingDistribution, rating)}
+            />
+          ))}
+        </Stack>
+      </Card>
+
+      <Title order={3} size="h4" mt="md">
+        示例库统计
+      </Title>
+
+      <Grid>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconFlask2 size={24} />}
+            title="香调总数"
+            value={libraryStats.totalFragrances}
+            subtitle="示例库中的全部香调"
+            color="violet"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconFlask2 size={24} />}
+            title="香水数量"
+            value={libraryStats.perfumeCount}
+            subtitle="perfume 分类"
+            color="pink"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 4 }}>
+          <StatCard
+            icon={<IconFlask2 size={24} />}
+            title="线香数量"
+            value={libraryStats.incenseCount}
+            subtitle="incense 分类"
+            color="indigo"
+          />
+        </Grid.Col>
+      </Grid>
+
+      <Card shadow="sm" padding="lg" radius="md" withBorder>
+        <Group mb="md" justify="space-between">
+          <Text size="lg" fw={600}>
+            分类占比分布
+          </Text>
+          <Text size="sm" c="dimmed">
+            共 {libraryStats.totalFragrances} 款香调
+          </Text>
+        </Group>
+        <Stack gap="md">
+          <CategoryBar
+            label="香水"
+            count={libraryStats.perfumeCount}
+            total={libraryStats.totalFragrances}
+            color="pink"
+          />
+          <CategoryBar
+            label="线香"
+            count={libraryStats.incenseCount}
+            total={libraryStats.totalFragrances}
+            color="indigo"
+          />
+        </Stack>
+      </Card>
+    </Stack>
+  );
+}
